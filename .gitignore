@@ -57,3 +57,7 @@ local.properties
  
 # PDT-specific
 .buildpath
+
+# Momentics IDE
+arm/**
+arm/**/*

@@ -21,11 +21,33 @@
 #include "applicationui.hpp"
 
 #include <Qt/qdeclarativedebug.h>
+#include <iostream>
 
 using namespace bb::cascades;
 
+
+static void customMessageHandler(QtMsgType type, const char *message)
+{
+	switch (type) {
+		case QtDebugMsg:
+			std::cout << "Debug: " << message << std::endl;
+			break;
+		case QtWarningMsg:
+			std::cout << "Warning: " << message << std::endl;
+			break;
+		case QtCriticalMsg:
+			std::cout << "Critical: " << message << std::endl;
+			break;
+		case QtFatalMsg:
+			std::cout << "Fatal: " << message << std::endl;
+			std::abort();
+			break;
+	}
+}
+
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
+	qInstallMsgHandler(customMessageHandler);
     Application app(argc, argv);
 
     // Create the Application UI object, this is where the main.qml file

@@ -21,7 +21,10 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/LocaleHandler>
 
+#include "net/network.h"
+
 using namespace bb::cascades;
+using namespace ayvu;
 
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         QObject(app)
@@ -43,6 +46,10 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     // Create scene document from main.qml asset, the parent is set
     // to ensure the document gets destroyed properly at shut down.
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
+
+    qmlRegisterType<Network>();
+    Network *network = new Network(this);
+    qml->setContextProperty("network", network);
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

@@ -17,12 +17,129 @@
 import bb.cascades 1.2
 
 Page {
+    
+    id: mainScreen
+    
+    property bool stopped: true
+    property bool calling: false
+    property bool incommingcall: false
+    property bool talking: false
+    
+    Menu.definition: MenuDefinition {
+        
+        actions: [
+            ActionItem {
+                title: "About"
+                imageSource: "asset:///images/ic_info.png"
+                onTriggered: {
+                    aboutSheet.createObject().open();
+                }
+            }
+        ]
+    }
+    
+    actions: [
+        
+        ActionItem {
+            id: startCallAction
+            title: "Call"
+            imageSource: "asset:///images/ic_microphone.png"
+            ActionBar.placement: ActionBarPlacement.OnBar
+            enabled: stopped
+        },
+        
+        ActionItem {
+            id: stopCallAction
+            title: "Stop"
+            imageSource: "asset:///images/ic_microphone_mute.png"
+            ActionBar.placement: ActionBarPlacement.OnBar
+            enabled: calling || incommingcall || talking
+        }
+    ]
+    
     Container {
-        //Todo: fill me with QML
+        layout: DockLayout {}
+        background: Color.LightGray
+        
         Label {
-            // Localized text with the dynamic translation and locale updates support
-            text: qsTr("Hello World") + Retranslate.onLocaleOrLanguageChanged
-            textStyle.base: SystemDefaults.TextStyles.BigText
+            id: labelIP
+//            text: _audioSender.getValidIPStr()
+            textStyle.color: Color.Black
+            
+            verticalAlignment: VerticalAlignment.Top
+            horizontalAlignment: HorizontalAlignment.Left
+        }
+        
+        Container {
+            
+            leftPadding: 5
+            rightPadding: 5
+            bottomPadding: 10
+            
+            verticalAlignment: VerticalAlignment.Center
+            horizontalAlignment: HorizontalAlignment.Center
+            
+            layout: StackLayout { 
+                orientation: LayoutOrientation.TopToBottom
+            }
+            
+            Label {
+                id: labelAddress
+                text: "Enter address: "
+                textStyle.color: Color.Black
+                
+                verticalAlignment: VerticalAlignment.Center
+                horizontalAlignment: HorizontalAlignment.Center
+            }
+            
+            Container {
+                
+                horizontalAlignment: HorizontalAlignment.Center
+                
+                layout: StackLayout { 
+                    orientation: LayoutOrientation.LeftToRight
+                }
+                
+                TextField {
+                    id: addressField
+                    maxWidth: 400
+                    hintText: "IP address"
+                    inputMode: TextFieldInputMode.NumbersAndPunctuation
+                    enabled: startCallAction.enabled
+                }   
+            }
+            
+            Divider {
+                opacity: 0
+            }
+            
+            Container {
+                
+                horizontalAlignment: HorizontalAlignment.Center
+                
+                layout: StackLayout { 
+                    orientation: LayoutOrientation.LeftToRight
+                }
+                
+                Button {
+                    text: "Myself"
+                    
+                    maxWidth: 300
+                    enabled: startCallAction.enabled
+                    onClicked: {
+                        addressField.text = network.getValidIPStr()
+                        addressField.focused
+                    }
+                }
+            }
         }
     }
+    
+    attachedObjects: [
+        ComponentDefinition {
+            id: aboutSheet
+            About {
+            }
+        }
+    ]
 }
