@@ -22,6 +22,7 @@
 #include <bb/cascades/LocaleHandler>
 
 #include "net/network.h"
+#include "net/session/state.h"
 
 using namespace bb::cascades;
 using namespace ayvu;
@@ -49,7 +50,11 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
 
     qmlRegisterType<Network>();
     Network *network = new Network(this);
-    qml->setContextProperty("network", network);
+    qml->setContextProperty("_network", network);
+
+    qmlRegisterType<State>();
+    State *state = State::getInstance();
+    qml->setContextProperty("_state", state);
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

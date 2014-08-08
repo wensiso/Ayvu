@@ -18,12 +18,26 @@ import bb.cascades 1.2
 
 Page {
     
-    id: mainScreen
+    property int state: _state.state
     
-    property bool stopped: true
-    property bool calling: false
-    property bool incommingcall: false
-    property bool talking: false
+    property bool stopped: _state.stopped
+    property bool calling: _state.calling
+    property bool incomming: _state.incomming
+    property bool talking: _state.talking
+    
+    function printState() {
+        console.debug("---------- \nActive state: " + _state.getStr(state))
+        console.debug("stopped: " + stopped)
+        console.debug("calling: " + calling)
+        console.debug("incomming: " + incomming)
+        console.debug("talking: " + talking) 
+    }
+    
+    onStateChanged: {
+        printState()
+    }
+    
+    id: mainScreen
     
     Menu.definition: MenuDefinition {
         
@@ -46,6 +60,9 @@ Page {
             imageSource: "asset:///images/ic_microphone.png"
             ActionBar.placement: ActionBarPlacement.OnBar
             enabled: stopped
+            onTriggered: {
+                _state.setCalling()
+            }
         },
         
         ActionItem {
@@ -53,7 +70,10 @@ Page {
             title: "Stop"
             imageSource: "asset:///images/ic_microphone_mute.png"
             ActionBar.placement: ActionBarPlacement.OnBar
-            enabled: calling || incommingcall || talking
+            enabled: calling ||incomming || talking
+            onTriggered: {
+                _state.setStopped();
+            }
         }
     ]
     
@@ -63,7 +83,7 @@ Page {
         
         Label {
             id: labelIP
-//            text: _audioSender.getValidIPStr()
+            text: _network.getValidIPStr()
             textStyle.color: Color.Black
             
             verticalAlignment: VerticalAlignment.Top
@@ -127,10 +147,23 @@ Page {
                     maxWidth: 300
                     enabled: startCallAction.enabled
                     onClicked: {
-                        addressField.text = network.getValidIPStr()
+                        addressField.text = _network.getValidIPStr()
                         addressField.focused
                     }
                 }
+            }
+
+            Container {
+                topPadding: 10
+                bottomPadding: 10
+                verticalAlignment: VerticalAlignment.Bottom
+                horizontalAlignment: HorizontalAlignment.Center
+            
+                Label {
+                    text: _state.getStr(state)
+                    textStyle.color: Color.Black
+                }
+            
             }
         }
     }
