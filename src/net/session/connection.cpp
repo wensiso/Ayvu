@@ -12,7 +12,16 @@ namespace ayvu {
 Connection::Connection(QObject *parent)
 : QTcpSocket(parent)
 {
+    qDebug() << "Creating connection";
     state = State::getInstance();
+    initHandlers();
+}
+
+void Connection::initHandlers()
+{
+    int r;
+    r = connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
+    Q_ASSERT(r);
 }
 
 bool Connection::sendMessage(const QString &message)
@@ -54,6 +63,7 @@ void Connection::processReadyRead()
 
         MessageType type = getMessageType(line);
 
+        //TODO Treate states...
         switch(type) {
             case CALL:
                 if(state->isStopped())
@@ -64,6 +74,7 @@ void Connection::processReadyRead()
             case BUSY:
                 break;
             case FINISH:
+                state->setStopped();
                 break;
             default:
                 break;

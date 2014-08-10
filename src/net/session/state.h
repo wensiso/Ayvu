@@ -22,14 +22,14 @@ class State: public QObject {
     Q_PROPERTY(int state READ getState WRITE setState NOTIFY stateChanged)
 
     Q_PROPERTY(bool stopped READ isStopped NOTIFY stateChanged)
-    Q_PROPERTY(bool calling READ isCalling NOTIFY stateChanged)
+    Q_PROPERTY(bool inviting READ isInviting NOTIFY stateChanged)
     Q_PROPERTY(bool incomming READ isIncomming NOTIFY stateChanged)
     Q_PROPERTY(bool talking READ isTalking NOTIFY stateChanged)
 
 public:
     enum StateType {
         STOPPED,
-        CALLING,
+        INVITING,
         INCOMMING,
         TALKING
     };
@@ -46,12 +46,12 @@ public:
     Q_INVOKABLE QString getStr(int);
 
     bool isStopped() const;
-    bool isCalling() const;
+    bool isInviting() const;
     bool isIncomming() const;
     bool isTalking() const;
 
     Q_INVOKABLE void setStopped();
-    Q_INVOKABLE void setCalling();
+    Q_INVOKABLE void setInviting();
     Q_INVOKABLE void setIncomming();
     Q_INVOKABLE void setTalking();
 

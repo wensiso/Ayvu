@@ -10,6 +10,7 @@
 
 #include <QTcpServer>
 
+#include "../network.h"
 #include "connection.h"
 
 namespace ayvu {
@@ -19,12 +20,21 @@ class Server: public QTcpServer {
 
 public:
 	Server(QObject *parent = 0);
+	void start();
 
-	signals:
-	void newConnection(Connection *connection);
+signals:
+	void newConnection(Connection*);
 
 protected:
-	void incomingConnection(int socketDescriptor);
+    void incomingConnection(int socketDescriptor);
+
+private slots:
+    void onNewConnection(Connection*);
+
+
+private:
+    Connection *m_connection;
+
 };
 
 } /* namespace ayvu */

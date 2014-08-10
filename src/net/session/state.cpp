@@ -33,9 +33,9 @@ bool State::isStopped() const
     return (m_state == STOPPED);
 }
 
-bool State::isCalling() const
+bool State::isInviting() const
 {
-    return (m_state == CALLING);
+    return (m_state == INVITING);
 }
 
 bool State::isIncomming() const
@@ -55,8 +55,8 @@ QString State::getStr(int type)
     {
         case STOPPED:
             return "STOPPED";
-        case CALLING:
-            return "CALLING";
+        case INVITING:
+            return "INVITING";
         case INCOMMING:
             return "INCOMMING";
         case TALKING:
@@ -73,10 +73,10 @@ void State::setStopped()
     setState(STOPPED);
 }
 
-void State::setCalling()
+void State::setInviting()
 {
-    qDebug() << "setCalling";
-    setState(CALLING);
+    qDebug() << "setInviting";
+    setState(INVITING);
 }
 
 void State::setIncomming()

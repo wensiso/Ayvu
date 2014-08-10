@@ -22,6 +22,8 @@
 #include <bb/cascades/LocaleHandler>
 
 #include "net/network.h"
+#include "net/session/server.h"
+#include "net/session/client.h"
 #include "net/session/state.h"
 
 using namespace bb::cascades;
@@ -55,6 +57,15 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     qmlRegisterType<State>();
     State *state = State::getInstance();
     qml->setContextProperty("_state", state);
+
+    qmlRegisterType<Client>();
+    Client *sessionClient = new Client(this);
+    qml->setContextProperty("_sessionClient", sessionClient);
+
+    qmlRegisterType<Server>();
+    Server *sessionServer = new Server(this);
+    qml->setContextProperty("_sessionServer", sessionServer);
+    sessionServer->start();
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

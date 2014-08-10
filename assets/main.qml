@@ -15,20 +15,21 @@
  */
 
 import bb.cascades 1.2
+import bb.system 1.2
 
 Page {
     
     property int state: _state.state
     
     property bool stopped: _state.stopped
-    property bool calling: _state.calling
+    property bool inviting: _state.inviting
     property bool incomming: _state.incomming
     property bool talking: _state.talking
-    
+        
     function printState() {
         console.debug("---------- \nActive state: " + _state.getStr(state))
         console.debug("stopped: " + stopped)
-        console.debug("calling: " + calling)
+        console.debug("inviting: " + inviting)
         console.debug("incomming: " + incomming)
         console.debug("talking: " + talking) 
     }
@@ -61,7 +62,14 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             enabled: stopped
             onTriggered: {
-                _state.setCalling()
+                if(addressField.text.length==0) {
+                    systemToast.body = "Enter an IP address"
+                    systemToast.show()
+                } else {
+                    _state.setInviting()
+                    _sessionClient.setAddress(addressField.text)
+                    _sessionClient.sendInviteMessage();
+                }
             }
         },
         
@@ -70,9 +78,10 @@ Page {
             title: "Stop"
             imageSource: "asset:///images/ic_microphone_mute.png"
             ActionBar.placement: ActionBarPlacement.OnBar
-            enabled: calling ||incomming || talking
+            enabled: !stopped
             onTriggered: {
                 _state.setStopped();
+                _sessionClient.sendFinishMessage()
             }
         }
     ]
@@ -173,6 +182,9 @@ Page {
             id: aboutSheet
             About {
             }
+        },
+        SystemToast {
+            id: systemToast
         }
     ]
 }

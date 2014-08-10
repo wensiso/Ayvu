@@ -40,7 +40,7 @@ private slots:
 	void processReadyRead();
 
 private:
-
+	void initHandlers();
 	bool sendMessage(const QString &message);
 	MessageType getMessageType(const QString &message);
 
