@@ -5,6 +5,8 @@
  *      Author: wendell
  */
 
+#include <QStringList>
+
 #include "connection.h"
 
 namespace ayvu {
@@ -12,7 +14,7 @@ namespace ayvu {
 Connection::Connection(QObject *parent)
 : QTcpSocket(parent)
 {
-    qDebug() << "Creating connection";
+    qDebug() << "[SERVER]: New connection...";
     state = State::getInstance();
     initHandlers();
 }
@@ -54,40 +56,45 @@ bool Connection::sendFinishMessage(const QString &message)
 
 void Connection::processReadyRead()
 {
+    QStringList message;
     QString from = peerAddress().toString();
-    qDebug() << "[SERVER]: Connection::processReadyRead() from " << from;
+    qDebug() << "[SERVER]: Connection with " << from;
 
     while (canReadLine()) {
+
         QString line = QString::fromUtf8(readLine().trimmed());
-        qDebug() << "[SERVER]: Message: " << line;
+        message.append(line);
+    }
+    qDebug() << "[SERVER]: Message: \n" << message;
 
-        MessageType type = getMessageType(line);
+    MessageType type = getMessageType(message.at(0));
+    qDebug() << "Message type: " << type;
 
-        //TODO Treate states...
-        switch(type) {
-            case CALL:
-                if(state->isStopped())
-                {
-                    state->setIncomming();
-                }
-                break;
-            case BUSY:
-                break;
-            case FINISH:
-                state->setStopped();
-                break;
-            default:
-                break;
-        }
+    //TODO Tratar, para cada tipo de mensagem recebida, cada estado atual.
+    switch(type) {
+        case INVITE:
+//            if(state->isStopped())
+            {
+                state->setIncomming();
+                // Tratar incomming
+            }
+            break;
+        case CALLING:
+            break;
+        case FINISH:
+            state->setStopped();
+            break;
+        default:
+            break;
     }
 }
 
 Connection::MessageType Connection::getMessageType(const QString& message)
 {
-    if (message.startsWith("CALL"))
-        return CALL;
-    if(message.startsWith("BUSY"))
-        return BUSY;
+    if (message.startsWith("INVITE"))
+        return INVITE;
+    if(message.startsWith("CALLING"))
+        return CALLING;
     if(message.startsWith("FINISH"))
         return FINISH;
     return ERROR;

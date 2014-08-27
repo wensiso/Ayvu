@@ -20,8 +20,8 @@ class Connection: public QTcpSocket {
 
 	enum MessageType {
 	    ERROR = -1,
-	    CALL,
-	    BUSY,
+	    INVITE,
+	    CALLING,
 	    FINISH
 	};
 

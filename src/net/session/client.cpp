@@ -47,7 +47,7 @@ void Client::setAddress(QHostAddress address)
 
 void Client::setAddress(QString address)
 {
-    qDebug() << "[SessionClient]: Setting address to " << address;
+    qDebug() << "Setting destity address to " << address;
     if (address.toLower().compare("localhost") == 0) {
         this->setAddress(QHostAddress::LocalHost);
     } else {
@@ -67,9 +67,9 @@ const QString Client::getStrAddress() const
 
 void Client::send(const QString& message)
 {
-    qDebug() << "[SessionClient]: Sending message to " + m_address.toString() + ": " + message;
+    qDebug() << "Sending message to " + m_address.toString() + ": \r\n" + message;
     if (m_socket->waitForConnected()) {
-        m_socket->write(QString(message + "\n").toUtf8());
+        m_socket->write(QString(message).toUtf8());
         m_socket->flush();
     }
 }
@@ -108,7 +108,7 @@ void Client::responseReceived()
 
 void Client::connected()
 {
-    qDebug() << "[SessionClient]: Connected to " + m_socket->peerAddress().toString();
+    qDebug() << "Client connected to " + m_socket->peerAddress().toString();
 }
 
 void Client::finishedSession()
