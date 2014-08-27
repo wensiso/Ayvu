@@ -24,10 +24,10 @@ public:
 
     Client(QObject *parent=0);
 
-    void setAddress(QHostAddress address);
-    const QHostAddress& getAddress() const;
-    Q_INVOKABLE void setAddress(QString address);
-    Q_INVOKABLE const QString getStrAddress() const;
+    void setServerAddress(QHostAddress address);
+    const QHostAddress& getServerAddress() const;
+    Q_INVOKABLE void setServerAddress(QString address);
+    Q_INVOKABLE const QString getStrServerAddress() const;
 
     Q_INVOKABLE void sendInviteMessage();
     Q_INVOKABLE void sendCallingMessage();
@@ -46,8 +46,9 @@ private:
     void send(const QString &);
 
     QTcpSocket *m_socket;
-    QHostAddress m_address;
+    QHostAddress server_address;
 
+    QHostAddress my_address;
     QString m_username;
     QString m_hostname;
 

@@ -13,13 +13,13 @@ Literal - Literal
 1. Calling
 	C:  INVITE <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
-		HOST: host:port \r\n
+		HOST: host \r\n
 		CALL-ID: <uuid>\r\n
 		\r\n
 		
 	S: 	ACCEPT <type> <Protocol Version> \r\n
 		USER: <receiver@_IP> \r\n
-		HOST: host:port \r\n
+		MEDIA-HOST: host:port \r\n
 		CALL-ID <uuid> \r\n
 		\r\n
 		
@@ -27,27 +27,27 @@ Literal - Literal
 		
 		REJECT <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
-		HOST: host:port \r\n
+		HOST: host \r\n
 		CALL-ID <uuid> \r\n
 		[CAUSE <Cause> \r\n]
 		\r\n
 	
 	C: 	CALLING <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
-		HOST: host:port \r\n
+		HOST: host \r\n
 		CALL-ID <uuid> \r\n
 		\r\n
 		==== or ====
 		CANCELLING <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
-		HOST: host:port \r\n
+		HOST: host \r\n
 		CALL-ID <uuid> \r\n
 		\r\n
 
 2. Finishing call (on calling)
 	C:	FINISH <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
-		HOST: host:port \r\n
+		HOST: host \r\n
 		CALL-ID <uuid> \r\n
 		\r\n
 		

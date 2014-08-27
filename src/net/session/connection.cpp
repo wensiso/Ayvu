@@ -5,9 +5,8 @@
  *      Author: wendell
  */
 
-#include <QStringList>
-
 #include "connection.h"
+#include "network.h"
 
 namespace ayvu {
 
@@ -24,34 +23,6 @@ void Connection::initHandlers()
     int r;
     r = connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
     Q_ASSERT(r);
-}
-
-bool Connection::sendMessage(const QString &message)
-{
-    if (message.isEmpty())
-        return false;
-
-    QByteArray msg = message.toUtf8();
-    QByteArray data = msg;
-    return write(data) == data.size();
-}
-
-bool Connection::sendCallMessage(const QString &message)
-{
-    QString msg = "CALL " + message;
-    return sendMessage(msg);
-}
-
-bool Connection::sendBusyMessage(const QString &message)
-{
-    QString msg = "BUSY " + message;
-    return sendMessage(msg);
-}
-
-bool Connection::sendFinishMessage(const QString &message)
-{
-    QString msg = "FINISH " + message;
-    return sendMessage(msg);
 }
 
 void Connection::processReadyRead()
@@ -76,7 +47,7 @@ void Connection::processReadyRead()
 //            if(state->isStopped())
             {
                 state->setIncomming();
-                // Tratar incomming
+                parseInviteMessage(message);
             }
             break;
         case CALLING:
@@ -89,15 +60,50 @@ void Connection::processReadyRead()
     }
 }
 
-Connection::MessageType Connection::getMessageType(const QString& message)
+int Connection::parseInviteMessage(QStringList& message)
 {
-    if (message.startsWith("INVITE"))
-        return INVITE;
-    if(message.startsWith("CALLING"))
-        return CALLING;
-    if(message.startsWith("FINISH"))
-        return FINISH;
-    return ERROR;
+    return 0;
+}
+
+int Connection::parseCallingMessage(QStringList& message)
+{
+    return 0;
+}
+
+int Connection::parseFinishMessage(QStringList& message)
+{
+    return 0;
+}
+
+bool Connection::sendMessage(const QString &message)
+{
+    if (message.isEmpty())
+        return false;
+
+    QByteArray msg = message.toUtf8();
+    QByteArray data = msg;
+    return write(data) == data.size();
+}
+
+bool Connection::sendAcceptMessage(const QString &message)
+{
+    QString msg(PROTO_ACCEPT);
+    msg += " " + message;
+    return sendMessage(msg);
+}
+
+bool Connection::sendRejectMessage(const QString &message)
+{
+    QString msg(PROTO_REJECT);
+    msg += " " + message;
+    return sendMessage(msg);
+}
+
+bool Connection::sendFinishMessage(const QString &message)
+{
+    QString msg(PROTO_FINISH);
+    msg += " " + message;
+    return sendMessage(msg);
 }
 
 } /* namespace ayvu */

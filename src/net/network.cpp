@@ -9,6 +9,16 @@
 
 namespace ayvu {
 
+MessageType getMessageType(const QString &message) {
+    if (message.startsWith(PROTO_INVITE))
+        return INVITE;
+    if(message.startsWith(PROTO_CALLING))
+        return CALLING;
+    if(message.startsWith(PROTO_FINISH))
+        return FINISH;
+    return ERROR;
+}
+
 Network::Network(QObject* parent):QObject(parent) {
 }
 

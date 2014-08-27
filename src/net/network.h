@@ -33,6 +33,15 @@
 
 namespace ayvu {
 
+enum MessageType {
+    ERROR = -1,
+    INVITE,
+    CALLING,
+    FINISH
+};
+
+MessageType getMessageType(const QString &);
+
 class Network : public QObject
 {
 	Q_OBJECT
@@ -41,6 +50,7 @@ public:
 	Network(QObject *parent = 0);
 	static QHostAddress getValidIP();
 	Q_INVOKABLE static QString getValidIPStr();
+
 };
 
 } /* namespace ayvu */

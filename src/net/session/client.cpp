@@ -12,15 +12,17 @@ namespace ayvu
 
 const QString Client::genericRequest = "%1 %2 %3\r\n"
         "USER: %5@%6\r\n"
-        "HOST: %7:%8\r\n"
-        "CALL-ID: %9\r\n"
+        "HOST: %7\r\n"
+        "CALL-ID: %8\r\n"
         "\r\n";
 
 Client::Client(QObject* parent) :
         QObject(parent)
 {
     m_socket = new QTcpSocket(this);
-    m_address = QHostAddress::LocalHost;
+    server_address = QHostAddress::LocalHost;
+
+    my_address = Network::getValidIP();
 
     m_username = "wendell";
     m_hostname = "blackberryZ10";
@@ -36,38 +38,38 @@ void Client::initHandlers()
     Q_ASSERT(s);
 }
 
-void Client::setAddress(QHostAddress address)
+void Client::setServerAddress(QHostAddress address)
 {
     if (m_socket->isOpen())
         m_socket->disconnectFromHost();
-    m_address = address;
-    m_socket->connectToHost(m_address, REQUEST_PORT);
+    server_address = address;
+    m_socket->connectToHost(server_address, REQUEST_PORT);
     qDebug() << "Socket State: " << m_socket->state();
 }
 
-void Client::setAddress(QString address)
+void Client::setServerAddress(QString address)
 {
-    qDebug() << "Setting destity address to " << address;
+    qDebug() << "Setting server address to " << address;
     if (address.toLower().compare("localhost") == 0) {
-        this->setAddress(QHostAddress::LocalHost);
+        this->setServerAddress(QHostAddress::LocalHost);
     } else {
-        this->setAddress(QHostAddress(address));
+        this->setServerAddress(QHostAddress(address));
     }
 }
 
-const QHostAddress& Client::getAddress() const
+const QHostAddress& Client::getServerAddress() const
 {
-    return m_address;
+    return server_address;
 }
 
-const QString Client::getStrAddress() const
+const QString Client::getStrServerAddress() const
 {
-    return m_address.toString();
+    return server_address.toString();
 }
 
 void Client::send(const QString& message)
 {
-    qDebug() << "Sending message to " + m_address.toString() + ": \r\n" + message;
+    qDebug() << "Sending message to " + server_address.toString() + ": \r\n" + message;
     if (m_socket->waitForConnected()) {
         m_socket->write(QString(message).toUtf8());
         m_socket->flush();
@@ -77,28 +79,28 @@ void Client::send(const QString& message)
 void Client::sendInviteMessage()
 {
     QString msg = genericRequest.arg(PROTO_INVITE, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, m_address.toString(), REQUEST_PORT_STR, "12345");
+            m_hostname, my_address.toString(), "12345");
     send(msg);
 }
 
 void Client::sendCallingMessage()
 {
     QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, m_address.toString(), REQUEST_PORT_STR, "12345");
+            m_hostname, my_address.toString(), "12345");
     send(msg);
 }
 
 void Client::sendCancellingMessage()
 {
     QString msg = genericRequest.arg(PROTO_CANCELLING, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, m_address.toString(), REQUEST_PORT_STR, "12345");
+            m_hostname, my_address.toString(), "12345");
     send(msg);
 }
 
 void Client::sendFinishMessage()
 {
     QString msg = genericRequest.arg(PROTO_FINISH, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, m_address.toString(), REQUEST_PORT_STR, "12345");
+            m_hostname, my_address.toString(), "12345");
     send(msg);
 }
 

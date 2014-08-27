@@ -10,6 +10,7 @@
 
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QStringList>
 
 #include "state.h"
 
@@ -18,18 +19,11 @@ namespace ayvu {
 class Connection: public QTcpSocket {
 	Q_OBJECT
 
-	enum MessageType {
-	    ERROR = -1,
-	    INVITE,
-	    CALLING,
-	    FINISH
-	};
-
 public:
 	Connection(QObject *parent = 0);
 
-	bool sendCallMessage(const QString &message);
-	bool sendBusyMessage(const QString &message);
+	bool sendAcceptMessage(const QString &message);
+	bool sendRejectMessage(const QString &message);
 	bool sendFinishMessage(const QString &message);
 
 signals:
@@ -42,9 +36,19 @@ private slots:
 private:
 	void initHandlers();
 	bool sendMessage(const QString &message);
-	MessageType getMessageType(const QString &message);
+
+	int parseInviteMessage(QStringList &message);
+	int parseCallingMessage(QStringList &message);
+	int parseFinishMessage(QStringList &message);
 
 	State *state;
+
+	QString proto_version;
+	QString call_type;
+	QString client;
+	QString client_host;
+	int client_port;
+	QString callid;
 
 };
 

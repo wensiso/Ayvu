@@ -67,7 +67,7 @@ Page {
                     systemToast.show()
                 } else {
                     _state.setInviting()
-                    _sessionClient.setAddress(addressField.text)
+                    _sessionClient.setServerAddress(addressField.text)
                     _sessionClient.sendInviteMessage();
                 }
             }
