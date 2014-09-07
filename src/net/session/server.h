@@ -9,16 +9,22 @@
 #define SERVER_H_
 
 #include <QTcpServer>
+#include <QString>
 
-#include "../network.h"
-#include "connection.h"
+#include <network.h>
+#include <connection.h>
 
 namespace ayvu {
+
+class Connection;
 
 class Server: public QTcpServer {
 	Q_OBJECT
 
 public:
+
+	static const QString genericResponse;
+
 	Server(QObject *parent = 0);
 	void start();
 

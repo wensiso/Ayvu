@@ -19,8 +19,8 @@ Literal - Literal
 		
 	S: 	ACCEPT <type> <Protocol Version> \r\n
 		USER: <receiver@_IP> \r\n
-		MEDIA-HOST: host:port \r\n
-		CALL-ID <uuid> \r\n
+		HOST: host:port \r\n  //media host
+		CALL-ID: <uuid> \r\n
 		\r\n
 		
 		=== or ====
@@ -28,8 +28,8 @@ Literal - Literal
 		REJECT <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
-		CALL-ID <uuid> \r\n
-		[CAUSE <Cause> \r\n]
+		CALL-ID: <uuid> \r\n
+		CAUSE: <Cause> \r\n
 		\r\n
 	
 	C: 	CALLING <type> <Protocol Version> \r\n
@@ -55,7 +55,7 @@ Type:
 	Audio
 	//Video
 
-Cause:
+Cause (case insensitive)
 	Calling (Calling someone)
 	Talking (Talking with someone)
 	Incomming (Receiving a call)

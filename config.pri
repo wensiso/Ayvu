@@ -50,6 +50,7 @@ config_pri_assets {
 
 config_pri_source_group1 {
     SOURCES += \
+        $$quote($$BASEDIR/src/appinfo.cpp) \
         $$quote($$BASEDIR/src/applicationui.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
         $$quote($$BASEDIR/src/net/network.cpp) \
@@ -59,6 +60,7 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/net/session/state.cpp)
 
     HEADERS += \
+        $$quote($$BASEDIR/src/appinfo.h) \
         $$quote($$BASEDIR/src/applicationui.hpp) \
         $$quote($$BASEDIR/src/net/network.h) \
         $$quote($$BASEDIR/src/net/session/client.h) \

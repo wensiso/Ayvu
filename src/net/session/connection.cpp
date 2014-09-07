@@ -5,8 +5,8 @@
  *      Author: wendell
  */
 
-#include "connection.h"
-#include "network.h"
+#include <connection.h>
+#include <network.h>
 
 namespace ayvu {
 
@@ -14,14 +14,14 @@ Connection::Connection(QObject *parent)
 : QTcpSocket(parent)
 {
     qDebug() << "[SERVER]: New connection...";
+    appinfo = AppInfo::getInstance();
     state = State::getInstance();
     initHandlers();
 }
 
 void Connection::initHandlers()
 {
-    int r;
-    r = connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
+    int r = connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
     Q_ASSERT(r);
 }
 
@@ -40,14 +40,15 @@ void Connection::processReadyRead()
 
     MessageType type = getMessageType(message.at(0));
     qDebug() << "Message type: " << type;
+    qDebug() << "My state: " << state->getStateStr();
 
     //TODO Tratar, para cada tipo de mensagem recebida, cada estado atual.
     switch(type) {
         case INVITE:
-//            if(state->isStopped())
-            {
-                state->setIncomming();
+            if(state->isStopped()) {
                 parseInviteMessage(message);
+            } else {
+                sendRejectMessage(PROTO_RCAUSE_BUSY);
             }
             break;
         case CALLING:
@@ -62,6 +63,8 @@ void Connection::processReadyRead()
 
 int Connection::parseInviteMessage(QStringList& message)
 {
+    qDebug() << "[SERVER]: Parsing INVITE message";
+    state->setIncomming();
     return 0;
 }
 
@@ -85,17 +88,21 @@ bool Connection::sendMessage(const QString &message)
     return write(data) == data.size();
 }
 
-bool Connection::sendAcceptMessage(const QString &message)
+bool Connection::sendAcceptMessage()
 {
-    QString msg(PROTO_ACCEPT);
-    msg += " " + message;
+    qDebug() << "[SERVER]: Accepting connection";
+    QString media_host = Network::getValidIPStr() + ":" + QString::number(DATA_PORT);
+
+    QString msg = Server::genericResponse.arg(PROTO_ACCEPT, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+            Network::getHostname(), media_host, "12345");
     return sendMessage(msg);
 }
 
-bool Connection::sendRejectMessage(const QString &message)
+bool Connection::sendRejectMessage(const QString &cause)
 {
-    QString msg(PROTO_REJECT);
-    msg += " " + message;
+    qDebug() << "[SERVER]: Rejecting connection: " << cause;
+    QString msg = Server::genericResponse.arg(PROTO_REJECT, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+            Network::getHostname(), Network::getValidIPStr(), "12345", cause);
     return sendMessage(msg);
 }
 

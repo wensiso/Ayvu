@@ -21,10 +21,10 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/LocaleHandler>
 
-#include "net/network.h"
-#include "net/session/server.h"
-#include "net/session/client.h"
-#include "net/session/state.h"
+#include <network.h>
+#include <server.h>
+#include <client.h>
+#include <state.h>
 
 using namespace bb::cascades;
 using namespace ayvu;

@@ -14,6 +14,9 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 
+//TODO Pegar hostname do usuario
+#define HOSTNAME "BlackberryZ10"
+
 #define REQUEST_PORT 8000
 #define REQUEST_PORT_STR "8000"
 
@@ -31,12 +34,21 @@
 #define PROTO_VERSION "AYVU/1.0"
 #define PROTO_AUDIO_TYPE "audio"
 
+#define PROTO_RCAUSE_CALLING PROTO_CALLING
+#define PROTO_RCAUSE_TALKING "Talking"
+#define PROTO_RCAUSE_INCOMMING "Incomming"
+#define PROTO_RCAUSE_BUSY "Busy"
+
+
 namespace ayvu {
 
 enum MessageType {
     ERROR = -1,
     INVITE,
+    ACCEPT,
+    REJECT,
     CALLING,
+    CANCELLING,
     FINISH
 };
 
@@ -50,6 +62,7 @@ public:
 	Network(QObject *parent = 0);
 	static QHostAddress getValidIP();
 	Q_INVOKABLE static QString getValidIPStr();
+	Q_INVOKABLE static QString getHostname();
 
 };
 

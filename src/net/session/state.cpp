@@ -67,6 +67,11 @@ QString State::getStr(int type)
     return str;
 }
 
+QString State::getStateStr()
+{
+    return getStr(m_state);
+}
+
 void State::setStopped()
 {
     qDebug() << "setStopped";

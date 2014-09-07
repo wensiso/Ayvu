@@ -5,15 +5,23 @@
  *      Author: wendell
  */
 
-#include "server.h"
+#include <server.h>
 
 namespace ayvu {
+
+const QString Server::genericResponse = "%1 %2 %3\r\n"
+        "USER: %5@%6\r\n"
+        "HOST: %7\r\n"
+        "CALL-ID: %8\r\n"
+        "CAUSE: %9"
+        "\r\n";
 
 Server::Server(QObject *parent)
      : QTcpServer(parent)
  {
     m_connection = 0;
-    connect(this, SIGNAL(newConnection(Connection*)), this, SLOT(onNewConnection(Connection*)));
+    int c = connect(this, SIGNAL(newConnection(Connection*)), this, SLOT(onNewConnection(Connection*)));
+    Q_ASSERT(c);
  }
 
 void Server::start()

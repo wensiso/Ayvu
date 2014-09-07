@@ -12,7 +12,9 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 
-#include "../network.h"
+#include <network.h>
+#include <state.h>
+#include <appinfo.h>
 
 namespace ayvu {
 
@@ -48,9 +50,11 @@ private:
     QTcpSocket *m_socket;
     QHostAddress server_address;
 
-    QHostAddress my_address;
-    QString m_username;
+    AppInfo *appinfo;
+    State *state;
+
     QString m_hostname;
+    QString my_address;
 
 };
 

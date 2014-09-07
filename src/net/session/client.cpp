@@ -5,7 +5,9 @@
  *      Author: wendell
  */
 
-#include "client.h"
+#include <QStringList>
+
+#include <client.h>
 
 namespace ayvu
 {
@@ -22,10 +24,11 @@ Client::Client(QObject* parent) :
     m_socket = new QTcpSocket(this);
     server_address = QHostAddress::LocalHost;
 
-    my_address = Network::getValidIP();
+    appinfo = AppInfo::getInstance();
+    state = State::getInstance();
 
-    m_username = "wendell";
-    m_hostname = "blackberryZ10";
+    m_hostname = Network::getHostname();
+    my_address = Network::getValidIPStr();
 
     this->initHandlers();
 }
@@ -78,34 +81,59 @@ void Client::send(const QString& message)
 
 void Client::sendInviteMessage()
 {
-    QString msg = genericRequest.arg(PROTO_INVITE, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, my_address.toString(), "12345");
+    QString msg = genericRequest.arg(PROTO_INVITE, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+            m_hostname, Network::getValidIPStr(), "12345");
     send(msg);
 }
 
 void Client::sendCallingMessage()
 {
-    QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, my_address.toString(), "12345");
+    QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+            m_hostname, my_address, "12345");
     send(msg);
 }
 
 void Client::sendCancellingMessage()
 {
-    QString msg = genericRequest.arg(PROTO_CANCELLING, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, my_address.toString(), "12345");
+    QString msg = genericRequest.arg(PROTO_CANCELLING, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+            m_hostname, my_address, "12345");
     send(msg);
 }
 
 void Client::sendFinishMessage()
 {
-    QString msg = genericRequest.arg(PROTO_FINISH, PROTO_AUDIO_TYPE, PROTO_VERSION, m_username,
-            m_hostname, my_address.toString(), "12345");
+    QString msg = genericRequest.arg(PROTO_FINISH, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+            m_hostname, my_address, "12345");
     send(msg);
 }
 
 void Client::responseReceived()
 {
+    qDebug() << "[Client]: Response received!";
+
+    QStringList message;
+    while (m_socket->canReadLine()) {
+
+        QString line = QString::fromUtf8(m_socket->readLine().trimmed());
+        message.append(line);
+    }
+    qDebug() << "[Client]: Message: \n" << message;
+
+    MessageType type = getMessageType(message.at(0));
+    qDebug() << "Message type: " << type;
+
+    //TODO Tratar, para cada tipo de mensagem recebida, cada estado atual.
+    switch(type) {
+        case ACCEPT:
+            break;
+        case REJECT:
+            qDebug() << "[Client]: Connection rejected";
+            state->setStopped();
+            break;
+        default:
+            break;
+    }
+
 }
 
 void Client::connected()

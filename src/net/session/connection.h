@@ -12,9 +12,13 @@
 #include <QHostAddress>
 #include <QStringList>
 
-#include "state.h"
+#include <appinfo.h>
+#include <server.h>
+#include <state.h>
 
 namespace ayvu {
+
+class Server;
 
 class Connection: public QTcpSocket {
 	Q_OBJECT
@@ -22,8 +26,8 @@ class Connection: public QTcpSocket {
 public:
 	Connection(QObject *parent = 0);
 
-	bool sendAcceptMessage(const QString &message);
-	bool sendRejectMessage(const QString &message);
+	bool sendAcceptMessage();
+	bool sendRejectMessage(const QString &cause);
 	bool sendFinishMessage(const QString &message);
 
 signals:
@@ -42,6 +46,7 @@ private:
 	int parseFinishMessage(QStringList &message);
 
 	State *state;
+	AppInfo *appinfo;
 
 	QString proto_version;
 	QString call_type;

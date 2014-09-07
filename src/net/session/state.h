@@ -34,7 +34,7 @@ public:
         TALKING
     };
 
-    Q_INVOKABLE static State *getInstance()
+    static State *getInstance()
     {
         if (!instance)
             instance = new State();
@@ -44,6 +44,7 @@ public:
     int getState() const;
 
     Q_INVOKABLE QString getStr(int);
+    Q_INVOKABLE QString getStateStr();
 
     bool isStopped() const;
     bool isInviting() const;
