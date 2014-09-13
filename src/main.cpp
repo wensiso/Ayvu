@@ -25,6 +25,10 @@
 
 using namespace bb::cascades;
 
+namespace ayvu {
+    qint64 clock_skew = 0;
+}
+
 
 static void customMessageHandler(QtMsgType type, const char *message)
 {

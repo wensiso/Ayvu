@@ -13,6 +13,7 @@
 
 #include <network.h>
 #include <connection.h>
+#include <state.h>
 
 namespace ayvu {
 
@@ -28,6 +29,9 @@ public:
 	Server(QObject *parent = 0);
 	void start();
 
+    Q_INVOKABLE void acceptCall();
+    Q_INVOKABLE void rejectCall();
+
 signals:
 	void newConnection(Connection*);
 
@@ -40,6 +44,7 @@ private slots:
 
 private:
     Connection *m_connection;
+    State *state;
 
 };
 

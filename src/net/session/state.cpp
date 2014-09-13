@@ -48,6 +48,18 @@ bool State::isTalking() const
     return (m_state == TALKING);
 }
 
+bool State::wasRejected() const
+{
+    return (m_state == REJECTED);
+}
+
+
+bool State::wasAccepted() const
+{
+    return (m_state == ACCEPTED);
+}
+
+
 QString State::getStr(int type)
 {
     QString str = "null";
@@ -61,6 +73,10 @@ QString State::getStr(int type)
             return "INCOMMING";
         case TALKING:
             return "TALKING";
+        case REJECTED:
+            return "REJECTED";
+        case ACCEPTED:
+            return "ACCEPTED";
         default:
             return str;
     }
@@ -94,6 +110,18 @@ void State::setTalking()
 {
     qDebug() << "setTalking";
     setState(TALKING);
+}
+
+void State::setRejected()
+{
+    qDebug() << "setRejected";
+    setState(REJECTED);
+}
+
+void State::setAccepted()
+{
+    qDebug() << "setAccepted";
+    setState(ACCEPTED);
 }
 
 } /* namespace ayvu */

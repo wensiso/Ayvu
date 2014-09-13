@@ -52,6 +52,7 @@ void Connection::processReadyRead()
             }
             break;
         case CALLING:
+            parseCallingMessage(message);
             break;
         case FINISH:
             state->setStopped();
@@ -63,6 +64,7 @@ void Connection::processReadyRead()
 
 int Connection::parseInviteMessage(QStringList& message)
 {
+    //TODO Parse invite message
     qDebug() << "[SERVER]: Parsing INVITE message";
     state->setIncomming();
     return 0;
@@ -70,6 +72,8 @@ int Connection::parseInviteMessage(QStringList& message)
 
 int Connection::parseCallingMessage(QStringList& message)
 {
+    //TODO Parse calling message
+    //TODO start void here
     return 0;
 }
 

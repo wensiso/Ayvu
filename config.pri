@@ -52,7 +52,13 @@ config_pri_source_group1 {
     SOURCES += \
         $$quote($$BASEDIR/src/appinfo.cpp) \
         $$quote($$BASEDIR/src/applicationui.cpp) \
+        $$quote($$BASEDIR/src/audio/AudioControl.cpp) \
+        $$quote($$BASEDIR/src/audio/AudioPCM.cpp) \
+        $$quote($$BASEDIR/src/audio/CircularBuffer.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
+        $$quote($$BASEDIR/src/net/data/DataReceiver.cpp) \
+        $$quote($$BASEDIR/src/net/data/DataSender.cpp) \
+        $$quote($$BASEDIR/src/net/data/Message.cpp) \
         $$quote($$BASEDIR/src/net/network.cpp) \
         $$quote($$BASEDIR/src/net/session/client.cpp) \
         $$quote($$BASEDIR/src/net/session/connection.cpp) \
@@ -62,6 +68,12 @@ config_pri_source_group1 {
     HEADERS += \
         $$quote($$BASEDIR/src/appinfo.h) \
         $$quote($$BASEDIR/src/applicationui.hpp) \
+        $$quote($$BASEDIR/src/audio/AudioControl.hpp) \
+        $$quote($$BASEDIR/src/audio/AudioPCM.hpp) \
+        $$quote($$BASEDIR/src/audio/CircularBuffer.h) \
+        $$quote($$BASEDIR/src/net/data/DataReceiver.hpp) \
+        $$quote($$BASEDIR/src/net/data/DataSender.hpp) \
+        $$quote($$BASEDIR/src/net/data/Message.hpp) \
         $$quote($$BASEDIR/src/net/network.h) \
         $$quote($$BASEDIR/src/net/session/client.h) \
         $$quote($$BASEDIR/src/net/session/connection.h) \
@@ -71,7 +83,9 @@ config_pri_source_group1 {
 
 INCLUDEPATH += $$quote($$BASEDIR/src/net) \
     $$quote($$BASEDIR/src/net/session) \
-    $$quote($$BASEDIR/src)
+    $$quote($$BASEDIR/src/net/data) \
+    $$quote($$BASEDIR/src) \
+    $$quote($$BASEDIR/src/audio)
 
 CONFIG += precompile_header
 
@@ -84,11 +98,21 @@ lupdate_inclusion {
         $$quote($$BASEDIR/../src/*.cc) \
         $$quote($$BASEDIR/../src/*.cpp) \
         $$quote($$BASEDIR/../src/*.cxx) \
+        $$quote($$BASEDIR/../src/audio/*.c) \
+        $$quote($$BASEDIR/../src/audio/*.c++) \
+        $$quote($$BASEDIR/../src/audio/*.cc) \
+        $$quote($$BASEDIR/../src/audio/*.cpp) \
+        $$quote($$BASEDIR/../src/audio/*.cxx) \
         $$quote($$BASEDIR/../src/net/*.c) \
         $$quote($$BASEDIR/../src/net/*.c++) \
         $$quote($$BASEDIR/../src/net/*.cc) \
         $$quote($$BASEDIR/../src/net/*.cpp) \
         $$quote($$BASEDIR/../src/net/*.cxx) \
+        $$quote($$BASEDIR/../src/net/data/*.c) \
+        $$quote($$BASEDIR/../src/net/data/*.c++) \
+        $$quote($$BASEDIR/../src/net/data/*.cc) \
+        $$quote($$BASEDIR/../src/net/data/*.cpp) \
+        $$quote($$BASEDIR/../src/net/data/*.cxx) \
         $$quote($$BASEDIR/../src/net/session/*.c) \
         $$quote($$BASEDIR/../src/net/session/*.c++) \
         $$quote($$BASEDIR/../src/net/session/*.cc) \

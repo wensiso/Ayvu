@@ -25,17 +25,34 @@ Page {
     property bool inviting: _state.inviting
     property bool incomming: _state.incomming
     property bool talking: _state.talking
+    property bool rejected: _state.rejected
+    property bool accepted: _state.accepted
+    
+    property string messageToast
+    property string caller: "tester@testapp"
         
-    function printState() {
+    function printAllStates() {
         console.debug("---------- \nActive state: " + _state.getStr(state))
         console.debug("stopped: " + stopped)
         console.debug("inviting: " + inviting)
         console.debug("incomming: " + incomming)
         console.debug("talking: " + talking) 
+        console.debug("rejected: " + rejected)
+        console.debug("accpeted: " + accepted) 
     }
     
     onStateChanged: {
-        printState()
+        printAllStates()
+        
+        if(rejected) {
+            messageToast = "Call rejected"
+            systemToast.show()
+        } else if(accepted){
+            messageToast = "Call accepted"
+            systemToast.show()
+        } else if(incomming) {
+            incommingCallDialog.show()
+        }
     }
     
     id: mainScreen
@@ -185,6 +202,30 @@ Page {
         },
         SystemToast {
             id: systemToast
+            body: messageToast
+        },
+        SystemDialog {
+            id: incommingCallDialog
+            title: "Incomming call from:"
+            body: caller
+            
+            confirmButton.label: "Accept"
+            confirmButton.enabled: true
+            cancelButton.label: "Reject"
+            cancelButton.enabled: true
+            onFinished: {
+                if(incommingCallDialog.result == SystemUiResult.ConfirmButtonSelection) {
+                    messageToast = "Initing call..."
+                    systemToast.show()
+                    _sessionServer.acceptCall()
+                    console.debug("[WENDELL]: QML Incomming call from " + caller)
+//                    _sessionManager.setAddress(incommingCallFrom)
+//                    _audioSender.setAddress(incommingCallFrom)
+//                    _audioControl.toggleAudioOn()
+                } else {
+                    _sessionServer.rejectCall()
+                }
+            }
         }
     ]
 }

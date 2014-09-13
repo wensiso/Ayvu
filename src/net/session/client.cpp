@@ -125,9 +125,15 @@ void Client::responseReceived()
     //TODO Tratar, para cada tipo de mensagem recebida, cada estado atual.
     switch(type) {
         case ACCEPT:
+            qDebug() << "[Client]: Connection accepted";
+            state->setAccepted();
+            sendCallingMessage();
+            //TODO Starts voice here
+            state->setTalking(); //TODO Only change to TALKING state after start voice conversation
             break;
         case REJECT:
             qDebug() << "[Client]: Connection rejected";
+            state->setRejected();
             state->setStopped();
             break;
         default:

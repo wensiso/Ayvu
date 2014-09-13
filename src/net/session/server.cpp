@@ -20,6 +20,7 @@ Server::Server(QObject *parent)
      : QTcpServer(parent)
  {
     m_connection = 0;
+    state = State::getInstance();
     int c = connect(this, SIGNAL(newConnection(Connection*)), this, SLOT(onNewConnection(Connection*)));
     Q_ASSERT(c);
  }
@@ -48,8 +49,21 @@ void Server::start()
      emit newConnection(m_connection);
  }
 
+void Server::acceptCall()
+{
+    m_connection->sendAcceptMessage();
+    state->setTalking(); //TODO Active this state only after voice send start
+}
+
+void Server::rejectCall()
+{
+    m_connection->sendRejectMessage(PROTO_RCAUSE_BUSY);
+    state->setStopped();
+}
+
  void Server::onNewConnection(Connection* newConnection) {
      qDebug() << "New connection: " << newConnection;
  }
 
 } /* namespace ayvu */
+

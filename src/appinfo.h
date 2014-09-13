@@ -31,6 +31,7 @@ private:
     AppInfo();
 
     QString m_username;
+
 };
 
 } /* namespace ayvu */

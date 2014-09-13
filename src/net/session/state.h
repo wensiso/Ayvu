@@ -25,13 +25,17 @@ class State: public QObject {
     Q_PROPERTY(bool inviting READ isInviting NOTIFY stateChanged)
     Q_PROPERTY(bool incomming READ isIncomming NOTIFY stateChanged)
     Q_PROPERTY(bool talking READ isTalking NOTIFY stateChanged)
+    Q_PROPERTY(bool rejected READ wasRejected NOTIFY stateChanged)
+    Q_PROPERTY(bool accepted READ wasAccepted NOTIFY stateChanged)
 
 public:
     enum StateType {
         STOPPED,
         INVITING,
         INCOMMING,
-        TALKING
+        TALKING,
+        REJECTED,
+        ACCEPTED
     };
 
     static State *getInstance()
@@ -50,11 +54,15 @@ public:
     bool isInviting() const;
     bool isIncomming() const;
     bool isTalking() const;
+    bool wasRejected() const;
+    bool wasAccepted() const;
 
     Q_INVOKABLE void setStopped();
     Q_INVOKABLE void setInviting();
     Q_INVOKABLE void setIncomming();
     Q_INVOKABLE void setTalking();
+    Q_INVOKABLE void setRejected();
+    Q_INVOKABLE void setAccepted();
 
 signals:
     void stateChanged(int);
