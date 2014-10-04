@@ -11,13 +11,15 @@ Literal - Literal
 ==== Session ====
 
 1. Calling
-	C:  INVITE <type> <Protocol Version> \r\n
+	Client:  
+		INVITE <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
 		CALL-ID: <uuid>\r\n
 		\r\n
 		
-	S: 	ACCEPT <type> <Protocol Version> \r\n
+	Server: 	
+		ACCEPT <type> <Protocol Version> \r\n
 		USER: <receiver@_IP> \r\n
 		HOST: host:port \r\n  //media host
 		CALL-ID: <uuid> \r\n
@@ -32,12 +34,15 @@ Literal - Literal
 		CAUSE: <Cause> \r\n
 		\r\n
 	
-	C: 	CALLING <type> <Protocol Version> \r\n
+	Client: 	
+		CALLING <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
 		CALL-ID <uuid> \r\n
 		\r\n
+		
 		==== or ====
+		
 		CANCELLING <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
@@ -45,7 +50,8 @@ Literal - Literal
 		\r\n
 
 2. Finishing call (on calling)
-	C:	FINISH <type> <Protocol Version> \r\n
+	Client:
+		FINISH <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
 		CALL-ID <uuid> \r\n
@@ -53,7 +59,7 @@ Literal - Literal
 		
 Type:
 	Audio
-	//Video
+	Video
 
 Cause (case insensitive)
 	Calling (Calling someone)
