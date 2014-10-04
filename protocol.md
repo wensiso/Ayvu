@@ -8,24 +8,27 @@ Literal - Literal
 [var] Optional
 //Comments (do not send it!)
 
-==== Session ====
+= Session =
 
 1. Calling
-	Client:  
+
+	=== Client ===
+	
 		INVITE <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
 		CALL-ID: <uuid>\r\n
 		\r\n
 		
-	Server: 	
+	=== Server ===
+	
 		ACCEPT <type> <Protocol Version> \r\n
 		USER: <receiver@_IP> \r\n
 		HOST: host:port \r\n  //media host
 		CALL-ID: <uuid> \r\n
 		\r\n
 		
-		=== or ====
+		==== or ====
 		
 		REJECT <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
@@ -34,7 +37,8 @@ Literal - Literal
 		CAUSE: <Cause> \r\n
 		\r\n
 	
-	Client: 	
+	=== Client ===
+	
 		CALLING <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
@@ -50,7 +54,9 @@ Literal - Literal
 		\r\n
 
 2. Finishing call (on calling)
-	Client:
+
+	=== Client ===
+	
 		FINISH <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
@@ -67,7 +73,7 @@ Cause (case insensitive)
 	Incomming (Receiving a call)
 	Busy (Default)
 	
-==== DATA ====
+= DATA =
 
 
 
