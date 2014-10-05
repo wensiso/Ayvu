@@ -41,12 +41,13 @@ private:
 	void initHandlers();
 	bool sendMessage(const QString &message);
 
-	int parseInviteMessage(QStringList &message);
-	int parseCallingMessage(QStringList &message);
-	int parseFinishMessage(QStringList &message);
+	int parseInviteRequest(QHash<QString, QString> &request);
+	int parseCallingRequest(QHash<QString, QString> &request);
+	int parseFinishRequest(QHash<QString, QString> &request);
 
 	State *state;
 	AppInfo *appinfo;
+	Server *server;
 
 	QString proto_version;
 	QString call_type;

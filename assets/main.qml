@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import bb.cascades 1.2
-import bb.system 1.2
+import bb.cascades 1.0
+import bb.system 1.0
+import bb.device 1.0
 
 Page {
     
@@ -29,7 +30,9 @@ Page {
     property bool accepted: _state.accepted
     
     property string messageToast
-    property string caller: "tester@testapp"
+    
+    property string callerName: _sessionServer.clientName
+    property string callerAddress: _sessionServer.clientAddress
         
     function printAllStates() {
         console.debug("---------- \nActive state: " + _state.getStr(state))
@@ -38,20 +41,26 @@ Page {
         console.debug("incomming: " + incomming)
         console.debug("talking: " + talking) 
         console.debug("rejected: " + rejected)
-        console.debug("accpeted: " + accepted) 
+        console.debug("acepted: " + accepted) 
     }
     
     onStateChanged: {
         printAllStates()
         
         if(rejected) {
+//            _audioControl.toggleAudioOff()
             messageToast = "Call rejected"
             systemToast.show()
         } else if(accepted){
+//            _audioControl.toggleAudioOn()
             messageToast = "Call accepted"
             systemToast.show()
         } else if(incomming) {
+            
+            ledController.flash()
+            vibrationController.start(50, 500)
             incommingCallDialog.show()
+            
         }
     }
     
@@ -71,8 +80,7 @@ Page {
     }
     
     actions: [
-        
-        ActionItem {
+            ActionItem {
             id: startCallAction
             title: "Call"
             imageSource: "asset:///images/ic_microphone.png"
@@ -97,6 +105,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             enabled: !stopped
             onTriggered: {
+//                _audioControl.toggleAudioOff();
                 _state.setStopped();
                 _sessionClient.sendFinishMessage()
             }
@@ -132,7 +141,7 @@ Page {
             Label {
                 id: labelAddress
                 text: "Enter address: "
-                textStyle.color: Color.Black
+                textStyle.color: Color.BlackQML
                 
                 verticalAlignment: VerticalAlignment.Center
                 horizontalAlignment: HorizontalAlignment.Center
@@ -204,26 +213,37 @@ Page {
             id: systemToast
             body: messageToast
         },
+        VibrationController {
+            id: vibrationController
+        },
+        Led {
+            id: ledController
+            color: LedColor.Yellow
+        },
         SystemDialog {
             id: incommingCallDialog
             title: "Incomming call from:"
-            body: caller
+            body: callerName
             
             confirmButton.label: "Accept"
             confirmButton.enabled: true
             cancelButton.label: "Reject"
             cancelButton.enabled: true
             onFinished: {
+                
+                vibrationController.stop()
+//                ledController.cancel()
+                
                 if(incommingCallDialog.result == SystemUiResult.ConfirmButtonSelection) {
                     messageToast = "Initing call..."
                     systemToast.show()
                     _sessionServer.acceptCall()
-                    console.debug("[WENDELL]: QML Incomming call from " + caller)
-//                    _sessionManager.setAddress(incommingCallFrom)
-//                    _audioSender.setAddress(incommingCallFrom)
+                    console.debug("[WENDELL]: Accepting call from " + callerName)
+                    _audioSender.setAddress(callerAddress)
 //                    _audioControl.toggleAudioOn()
                 } else {
-                    _sessionServer.rejectCall()
+                    console.debug("[WENDELL]: Rejecting call from " + callerName)
+//                    _sessionServer.rejectCall()
                 }
             }
         }

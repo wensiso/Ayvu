@@ -26,8 +26,14 @@
 #include <client.h>
 #include <state.h>
 
+#include "AudioControl.hpp"
+#include "DataReceiver.hpp"
+#include "DataSender.hpp"
+
 using namespace bb::cascades;
 using namespace ayvu;
+
+AudioControl* audioControl;
 
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         QObject(app)
@@ -66,6 +72,18 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     Server *sessionServer = new Server(this);
     qml->setContextProperty("_sessionServer", sessionServer);
     sessionServer->start();
+
+    qmlRegisterType<AudioControl>();
+    audioControl = new AudioControl(this);
+    qml->setContextProperty("_audioControl", audioControl);
+
+    qmlRegisterType<DataSender>();
+    DataSender *audioSender = DataSender::getInstance();
+    qml->setContextProperty("_audioSender", audioSender);
+
+    qmlRegisterType<DataReceiver>();
+    DataReceiver *audioReceiver = DataReceiver::getInstance();
+    qml->setContextProperty("_audioReceiver", audioReceiver);
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

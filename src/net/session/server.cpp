@@ -21,6 +21,9 @@ Server::Server(QObject *parent)
  {
     m_connection = 0;
     state = State::getInstance();
+    m_clientName = "None";
+    m_clientAddress = "None";
+
     int c = connect(this, SIGNAL(newConnection(Connection*)), this, SLOT(onNewConnection(Connection*)));
     Q_ASSERT(c);
  }
@@ -64,6 +67,28 @@ void Server::rejectCall()
  void Server::onNewConnection(Connection* newConnection) {
      qDebug() << "New connection: " << newConnection;
  }
+
+ void Server::setClientAddress(const QString& clientAddress)
+ {
+     m_clientAddress = clientAddress;
+     emit newClientAddress(clientAddress);
+ }
+
+ void Server::setClientName(const QString& clientName)
+ {
+     m_clientName = clientName;
+     emit newClientName(clientName);
+ }
+
+QString Server::getClientName() const
+{
+    return m_clientName;
+}
+
+QString Server::getClientAddress() const
+{
+    return m_clientAddress;
+}
 
 } /* namespace ayvu */
 

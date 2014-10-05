@@ -34,6 +34,11 @@
 #define PROTO_VERSION "AYVU/1.0"
 #define PROTO_AUDIO_TYPE "audio"
 
+#define PROTO_USER "USER"
+#define PROTO_HOST "HOST"
+#define PROTO_CALL_ID "CALL-ID"
+#define PROTO_CAUSE "CAUSE"
+
 #define PROTO_RCAUSE_CALLING PROTO_CALLING
 #define PROTO_RCAUSE_TALKING "Talking"
 #define PROTO_RCAUSE_INCOMMING "Incomming"

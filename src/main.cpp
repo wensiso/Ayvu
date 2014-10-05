@@ -15,6 +15,7 @@
  */
 
 #include <bb/cascades/Application>
+#include <bb/device/Led>
 
 #include <QLocale>
 #include <QTranslator>
@@ -52,6 +53,10 @@ static void customMessageHandler(QtMsgType type, const char *message)
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
 	qInstallMsgHandler(customMessageHandler);
+
+	qmlRegisterType<bb::device::Led>("bb.device", 1, 0, "Led");
+	qmlRegisterUncreatableType<bb::device::LedColor>("bb.device", 1, 0, "LedColor", "");
+
     Application app(argc, argv);
 
     // Create the Application UI object, this is where the main.qml file

@@ -7,6 +7,8 @@
 
 #include <appinfo.h>
 
+using namespace bb::device;
+
 namespace ayvu
 {
 
@@ -15,10 +17,13 @@ AppInfo *AppInfo::instance = 0;
 AppInfo::AppInfo()
 {
     m_username = DEFAULT_USERNAME;
+//    m_devicename = m_deviceinfo.deviceName();
+//    qDebug() << "DEVICE NAME: " << m_devicename;
 }
 
-const QString& AppInfo::getUsername() const
+const QString AppInfo::getUsername() const
 {
+//    return QString(m_username + "@" + m_devicename);
     return m_username;
 }
 

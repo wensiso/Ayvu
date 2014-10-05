@@ -46,7 +46,7 @@
 
     <!-- Description, displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-    <description>The Ayvu application</description>
+    <description>The Ayvu Wi-fi Wlakie-Talkie application</description>
 
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
@@ -96,10 +96,14 @@
 
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
+    <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
+    
+    <permission>access_led_control</permission>
     <permission>run_when_backgrounded</permission>
     <permission>access_shared</permission>
     <permission>record_audio</permission>
     <permission>access_internet</permission>
-    <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
+    <permission>read_device_identifying_information</permission>
+    <permission>post_notification</permission>
 
 </qnx>

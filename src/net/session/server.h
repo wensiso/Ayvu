@@ -22,6 +22,9 @@ class Connection;
 class Server: public QTcpServer {
 	Q_OBJECT
 
+    Q_PROPERTY(QString clientName READ getClientName NOTIFY newClientName)
+	Q_PROPERTY(QString clientAddress READ getClientAddress NOTIFY newClientAddress)
+
 public:
 
 	static const QString genericResponse;
@@ -32,8 +35,15 @@ public:
     Q_INVOKABLE void acceptCall();
     Q_INVOKABLE void rejectCall();
 
+    QString getClientName() const;
+    QString getClientAddress() const;
+    void setClientAddress(const QString& clientAddress);
+    void setClientName(const QString& clientName);
+
 signals:
 	void newConnection(Connection*);
+	void newClientName(QString);
+	void newClientAddress(QString);
 
 protected:
     void incomingConnection(int socketDescriptor);
@@ -41,10 +51,12 @@ protected:
 private slots:
     void onNewConnection(Connection*);
 
-
 private:
     Connection *m_connection;
     State *state;
+
+    QString m_clientName;
+    QString m_clientAddress;
 
 };
 

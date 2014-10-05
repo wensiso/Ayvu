@@ -8,6 +8,8 @@
 #ifndef APPINFO_H_
 #define APPINFO_H_
 
+#include <bb/device/HardwareInfo>
+
 #define DEFAULT_USERNAME "user"
 
 namespace ayvu
@@ -23,15 +25,17 @@ public:
         return instance;
     }
 
-    const QString& getUsername() const;
+    const QString getUsername() const;
     void setUsername(const QString& username);
 
 private:
     static AppInfo *instance; //Singleton
     AppInfo();
 
-    QString m_username;
+    bb::device::HardwareInfo m_deviceinfo;
 
+    QString m_username;
+    QString m_devicename;
 };
 
 } /* namespace ayvu */

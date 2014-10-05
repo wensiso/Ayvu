@@ -8,6 +8,8 @@
 #include <connection.h>
 #include <network.h>
 
+#include <QString>
+
 namespace ayvu {
 
 Connection::Connection(QObject *parent)
@@ -16,6 +18,8 @@ Connection::Connection(QObject *parent)
     qDebug() << "[SERVER]: New connection...";
     appinfo = AppInfo::getInstance();
     state = State::getInstance();
+    server = dynamic_cast<Server*> (parent);
+
     initHandlers();
 }
 
@@ -28,31 +32,38 @@ void Connection::initHandlers()
 void Connection::processReadyRead()
 {
     QStringList message;
+    QHash<QString, QString> request;
+    int i=0;
+
     QString from = peerAddress().toString();
-    qDebug() << "[SERVER]: Connection with " << from;
+    qDebug() << "[SERVER]: Receiving connection from " << from;
 
     while (canReadLine()) {
-
         QString line = QString::fromUtf8(readLine().trimmed());
+        if(i && !line.isEmpty()) {  //pula a primeira e a ultima linha
+            QStringList token = line.remove(' ').split(':', QString::SkipEmptyParts);
+            request.insert(token.at(0), token.at(1));
+        }
         message.append(line);
+        ++i;
     }
-    qDebug() << "[SERVER]: Message: \n" << message;
 
     MessageType type = getMessageType(message.at(0));
     qDebug() << "Message type: " << type;
+    qDebug() << "Request: \n" << request;
     qDebug() << "My state: " << state->getStateStr();
 
     //TODO Tratar, para cada tipo de mensagem recebida, cada estado atual.
     switch(type) {
         case INVITE:
             if(state->isStopped()) {
-                parseInviteMessage(message);
+                parseInviteRequest(request);
             } else {
                 sendRejectMessage(PROTO_RCAUSE_BUSY);
             }
             break;
         case CALLING:
-            parseCallingMessage(message);
+            parseCallingRequest(request);
             break;
         case FINISH:
             state->setStopped();
@@ -62,22 +73,29 @@ void Connection::processReadyRead()
     }
 }
 
-int Connection::parseInviteMessage(QStringList& message)
+int Connection::parseInviteRequest(QHash<QString, QString>& request)
 {
-    //TODO Parse invite message
-    qDebug() << "[SERVER]: Parsing INVITE message";
+    qDebug() << "[SERVER]: Parsing INVITE request";
+
+    QString username = request.find(PROTO_USER).value();
+    QString host = request.find(PROTO_HOST).value();
+
+    qDebug() << "[SERVER]: Connected with " << username << " from " << host;
+
+    server->setClientName(username);
+    server->setClientAddress(host);
     state->setIncomming();
     return 0;
 }
 
-int Connection::parseCallingMessage(QStringList& message)
+int Connection::parseCallingRequest(QHash<QString, QString>& request)
 {
     //TODO Parse calling message
     //TODO start void here
     return 0;
 }
 
-int Connection::parseFinishMessage(QStringList& message)
+int Connection::parseFinishRequest(QHash<QString, QString>& request)
 {
     return 0;
 }
