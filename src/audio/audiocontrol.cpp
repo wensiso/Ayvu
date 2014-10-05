@@ -16,7 +16,8 @@
  * limitations under the License.
  */
 
-#include "AudioControl.hpp"
+#include <audiocontrol.h>
+
 #include <audio/audio_manager_routing.h>
 #include <bb/system/phone/Phone>
 #include <QDebug>
@@ -24,8 +25,8 @@
 #include <bb/device/CellularNetworkInfo>
 #include <bb/device/CellularRadioInfo>
 
-#include "AudioPCM.hpp"
-#include "DataSender.hpp"
+#include <audiopcm.h>
+#include <datasender.h>
 
 using namespace bb::system::phone;
 using namespace bb::device;

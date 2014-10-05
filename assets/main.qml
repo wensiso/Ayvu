@@ -56,11 +56,9 @@ Page {
             messageToast = "Call accepted"
             systemToast.show()
         } else if(incomming) {
-            
             ledController.flash()
             vibrationController.start(50, 500)
-            incommingCallDialog.show()
-            
+            incommingCallDialog.show()            
         }
     }
     
@@ -218,7 +216,7 @@ Page {
         },
         Led {
             id: ledController
-            color: LedColor.Yellow
+            color: LedColor.Blue
         },
         SystemDialog {
             id: incommingCallDialog
@@ -230,10 +228,8 @@ Page {
             cancelButton.label: "Reject"
             cancelButton.enabled: true
             onFinished: {
-                
                 vibrationController.stop()
-//                ledController.cancel()
-                
+                ledController.cancel()           
                 if(incommingCallDialog.result == SystemUiResult.ConfirmButtonSelection) {
                     messageToast = "Initing call..."
                     systemToast.show()
@@ -243,7 +239,7 @@ Page {
 //                    _audioControl.toggleAudioOn()
                 } else {
                     console.debug("[WENDELL]: Rejecting call from " + callerName)
-//                    _sessionServer.rejectCall()
+                    _sessionServer.rejectCall()
                 }
             }
         }

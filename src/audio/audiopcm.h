@@ -4,9 +4,10 @@
 #include <audio/audio_manager_routing.h>
 
 #include <QDebug>
-#include "DataSender.hpp"
-#include "DataReceiver.hpp"
-#include "CircularBuffer.h"
+
+#include <datasender.h>
+#include <datareceiver.h>
+#include <circularbuffer.h>
 
 namespace ayvu {
 

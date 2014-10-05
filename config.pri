@@ -52,13 +52,13 @@ config_pri_source_group1 {
     SOURCES += \
         $$quote($$BASEDIR/src/appinfo.cpp) \
         $$quote($$BASEDIR/src/applicationui.cpp) \
-        $$quote($$BASEDIR/src/audio/AudioControl.cpp) \
-        $$quote($$BASEDIR/src/audio/AudioPCM.cpp) \
-        $$quote($$BASEDIR/src/audio/CircularBuffer.cpp) \
+        $$quote($$BASEDIR/src/audio/audiocontrol.cpp) \
+        $$quote($$BASEDIR/src/audio/audiopcm.cpp) \
+        $$quote($$BASEDIR/src/audio/circularbuffer.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
-        $$quote($$BASEDIR/src/net/data/DataReceiver.cpp) \
-        $$quote($$BASEDIR/src/net/data/DataSender.cpp) \
-        $$quote($$BASEDIR/src/net/data/Message.cpp) \
+        $$quote($$BASEDIR/src/net/data/datareceiver.cpp) \
+        $$quote($$BASEDIR/src/net/data/datasender.cpp) \
+        $$quote($$BASEDIR/src/net/data/message.cpp) \
         $$quote($$BASEDIR/src/net/network.cpp) \
         $$quote($$BASEDIR/src/net/session/client.cpp) \
         $$quote($$BASEDIR/src/net/session/connection.cpp) \
@@ -68,12 +68,12 @@ config_pri_source_group1 {
     HEADERS += \
         $$quote($$BASEDIR/src/appinfo.h) \
         $$quote($$BASEDIR/src/applicationui.hpp) \
-        $$quote($$BASEDIR/src/audio/AudioControl.hpp) \
-        $$quote($$BASEDIR/src/audio/AudioPCM.hpp) \
-        $$quote($$BASEDIR/src/audio/CircularBuffer.h) \
-        $$quote($$BASEDIR/src/net/data/DataReceiver.hpp) \
-        $$quote($$BASEDIR/src/net/data/DataSender.hpp) \
-        $$quote($$BASEDIR/src/net/data/Message.hpp) \
+        $$quote($$BASEDIR/src/audio/audiocontrol.h) \
+        $$quote($$BASEDIR/src/audio/audiopcm.h) \
+        $$quote($$BASEDIR/src/audio/circularbuffer.h) \
+        $$quote($$BASEDIR/src/net/data/datareceiver.h) \
+        $$quote($$BASEDIR/src/net/data/datasender.h) \
+        $$quote($$BASEDIR/src/net/data/message.h) \
         $$quote($$BASEDIR/src/net/network.h) \
         $$quote($$BASEDIR/src/net/session/client.h) \
         $$quote($$BASEDIR/src/net/session/connection.h) \

@@ -1,4 +1,4 @@
-#include "AudioPCM.hpp"
+#include <audiopcm.h>
 
 namespace ayvu {
 

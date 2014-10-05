@@ -26,9 +26,9 @@
 #include <client.h>
 #include <state.h>
 
-#include "AudioControl.hpp"
-#include "DataReceiver.hpp"
-#include "DataSender.hpp"
+#include <audiocontrol.h>
+#include <datareceiver.h>
+#include <datasender.h>
 
 using namespace bb::cascades;
 using namespace ayvu;

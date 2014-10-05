@@ -1,7 +1,6 @@
-#include "DataSender.hpp"
+#include <datasender.h>
 
 #include <network.h>
-#include <QDateTime>
 
 namespace ayvu {
 
@@ -14,6 +13,7 @@ DataSender::DataSender() {
 }
 
 void DataSender::setAddress(QHostAddress address) {
+    qDebug() << "[DataSender] New destiny address: " << address.toString();
 	this->m_address = address;
 }
 
@@ -60,7 +60,7 @@ int DataSender::writeDatagram(QByteArray &datagram) {
 			this->m_address, DATA_PORT);
 
 	if (ret < 0) {
-		qWarning() << "Error: datagram wasn't sent!";
+		qWarning() << "[DataSender] Error: datagram wasn't sent!";
 	}
 	return ret;
 }

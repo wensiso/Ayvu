@@ -14,6 +14,11 @@
 #include <QHostAddress>
 #include <QDir>
 
+#include <audiopcm.h>
+#include <message.h>
+#include <datasender.h>
+#include <network.h>
+
 #define LOG_DIR "shared/documents/wt/"
 #define LOG_FILE "log-"
 

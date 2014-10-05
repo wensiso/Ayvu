@@ -6,8 +6,9 @@
 #include <QUdpSocket>
 #include <QByteArray>
 #include <QHostAddress>
+#include <QDateTime>
 
-#include "Message.hpp"
+#include <message.h>
 
 namespace ayvu {
 

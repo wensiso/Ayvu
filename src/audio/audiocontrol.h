@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QVariant>
 
-#include "AudioPCM.hpp"
+#include <audiopcm.h>
 
 using namespace bb::multimedia;
 

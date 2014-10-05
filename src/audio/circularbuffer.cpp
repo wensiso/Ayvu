@@ -5,7 +5,7 @@
  *      Author: Wendell
  */
 
-#include "CircularBuffer.h"
+#include <circularbuffer.h>
 
 namespace ayvu {
 

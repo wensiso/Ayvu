@@ -1,9 +1,4 @@
-#include "DataReceiver.hpp"
-#include "AudioPCM.hpp"
-#include "Message.hpp"
-#include "DataSender.hpp"
-
-#include <network.h>
+#include <datareceiver.h>
 
 namespace ayvu {
 

@@ -5,9 +5,7 @@
  *      Author: Wendell
  */
 
-#include "Message.hpp"
-
-#include <QBitArray>
+#include <message.h>
 
 namespace ayvu {
 

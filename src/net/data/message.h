@@ -16,6 +16,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QDateTime>
+#include <QBitArray>
 
 namespace ayvu {
 
