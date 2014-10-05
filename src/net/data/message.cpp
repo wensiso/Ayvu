@@ -44,7 +44,6 @@ void Message::createFromReceivedDatagram(QByteArray *datagram) {
 	m_header.type = header.at(0);
 	header.remove(0, 1);
 
-	//TODO Take endianness into account
 	char* char_ts = header.left(sizeof(qint64)).data();
 	memcpy(&m_header.timestamp, char_ts, sizeof(qint64));
 
@@ -59,7 +58,6 @@ QByteArray Message::createDatagram() {
 	QByteArray message;
 	message.append(m_header.type);
 
-	//TODO Take endianness into account
 	char char_ts[sizeof(qint64)];
 	memcpy(char_ts, &m_header.timestamp, sizeof(qint64));
 	message.append(char_ts, sizeof(qint64));

@@ -20,6 +20,8 @@ import bb.device 1.0
 
 Page {
     
+    
+    
     property int state: _state.state
     
     property bool stopped: _state.stopped
@@ -48,11 +50,12 @@ Page {
         printAllStates()
         
         if(rejected) {
-//            _audioControl.toggleAudioOff()
+            _audioControl.toggleAudioOff()
             messageToast = "Call rejected"
             systemToast.show()
         } else if(accepted){
-//            _audioControl.toggleAudioOn()
+            _audioSender.setAddress(_sessionClient.getStrServerAddress())
+            _audioControl.toggleAudioOn()
             messageToast = "Call accepted"
             systemToast.show()
         } else if(incomming) {
@@ -103,7 +106,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             enabled: !stopped
             onTriggered: {
-//                _audioControl.toggleAudioOff();
+                _audioControl.toggleAudioOff();
                 _state.setStopped();
                 _sessionClient.sendFinishMessage()
             }
@@ -235,8 +238,9 @@ Page {
                     systemToast.show()
                     _sessionServer.acceptCall()
                     console.debug("[WENDELL]: Accepting call from " + callerName)
+                    _sessionClient.setServerAddress(callerAddress)
                     _audioSender.setAddress(callerAddress)
-//                    _audioControl.toggleAudioOn()
+                    _audioControl.toggleAudioOn()
                 } else {
                     console.debug("[WENDELL]: Rejecting call from " + callerName)
                     _sessionServer.rejectCall()

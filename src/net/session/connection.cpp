@@ -92,11 +92,22 @@ int Connection::parseCallingRequest(QHash<QString, QString>& request)
 {
     //TODO Parse calling message
     //TODO start void here
+    qDebug() << "[SERVER] Parsing calling message..." << request;
     return 0;
 }
 
 int Connection::parseFinishRequest(QHash<QString, QString>& request)
 {
+    //TODO Get Call-id and treat request
+    qDebug() << "[SERVER]: Parsing FINISH request";
+
+    QString username = request.find(PROTO_USER).value();
+    QString host = request.find(PROTO_HOST).value();
+
+    qDebug() << "[SERVER]: Finished received from " << username << " at " << host;
+
+    state->setStopped();
+    return 0;
     return 0;
 }
 

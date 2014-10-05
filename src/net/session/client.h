@@ -33,7 +33,6 @@ public:
 
     Q_INVOKABLE void sendInviteMessage();
     Q_INVOKABLE void sendCallingMessage();
-    Q_INVOKABLE void sendCancellingMessage();
     Q_INVOKABLE void sendFinishMessage();
 
 public slots:

@@ -36,18 +36,10 @@ Literal - Literal
 		CALL-ID: <uuid> \r\n
 		CAUSE: <Cause> \r\n
 		\r\n
-	
+		
 	=== Client ===
-	
+		
 		CALLING <type> <Protocol Version> \r\n
-		USER: <sender@_IP> \r\n
-		HOST: host \r\n
-		CALL-ID <uuid> \r\n
-		\r\n
-		
-		==== or ====
-		
-		CANCELLING <type> <Protocol Version> \r\n
 		USER: <sender@_IP> \r\n
 		HOST: host \r\n
 		CALL-ID <uuid> \r\n

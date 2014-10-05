@@ -45,16 +45,19 @@ int DataSender::writeMessage(QByteArray &datagram) {
 
 	if (ret < 0) {
 		--seq;
-		qWarning() << "Error: datagram wasn't sent!";
+		qWarning() << "Error: message wasn't sent!";
 	}
 	return ret;
 }
 
 /**
- * Send a pure datagram
+ * Send a pure datagram (to reports...)
  */
 int DataSender::writeDatagram(QByteArray &datagram) {
 	int ret;
+
+    qDebug() << "[DataSender] Sending report to " << m_udpSender->localAddress().toString();
+
 
 	ret = m_udpSender->writeDatagram(datagram.data(), datagram.size(),
 			this->m_address, DATA_PORT);

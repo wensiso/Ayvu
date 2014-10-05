@@ -10,10 +10,10 @@
 namespace ayvu {
 
 const QString Server::genericResponse = "%1 %2 %3\r\n"
-        "USER: %5@%6\r\n"
-        "HOST: %7\r\n"
-        "CALL-ID: %8\r\n"
-        "CAUSE: %9"
+        PROTO_USER ": %5@%6\r\n"
+        PROTO_HOST ": %7\r\n"
+        PROTO_CALL_ID ": %8\r\n"
+        PROTO_CAUSE ": %9"
         "\r\n";
 
 Server::Server(QObject *parent)

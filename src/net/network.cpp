@@ -16,10 +16,8 @@ MessageType getMessageType(const QString &message) {
         return ACCEPT;
     if (message.startsWith(PROTO_REJECT))
         return REJECT;
-    if(message.startsWith(PROTO_CALLING))
-        return CALLING;
-    if(message.startsWith(PROTO_CANCELLING))
-        return CANCELLING;
+    if (message.startsWith(PROTO_CALLING))
+            return CALLING;
     if(message.startsWith(PROTO_FINISH))
         return FINISH;
     return ERROR;

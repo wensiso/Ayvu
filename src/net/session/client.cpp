@@ -13,9 +13,9 @@ namespace ayvu
 {
 
 const QString Client::genericRequest = "%1 %2 %3\r\n"
-        "USER: %5@%6\r\n"
-        "HOST: %7\r\n"
-        "CALL-ID: %8\r\n"
+        PROTO_USER ": %5@%6\r\n"
+        PROTO_HOST ": %7\r\n"
+        PROTO_CALL_ID ": %8\r\n"
         "\r\n";
 
 Client::Client(QObject* parent) :
@@ -88,14 +88,8 @@ void Client::sendInviteMessage()
 
 void Client::sendCallingMessage()
 {
+    qDebug() << "[Client] Sending calling...";
     QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
-            m_hostname, my_address, "12345");
-    send(msg);
-}
-
-void Client::sendCancellingMessage()
-{
-    QString msg = genericRequest.arg(PROTO_CANCELLING, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
             m_hostname, my_address, "12345");
     send(msg);
 }
@@ -128,7 +122,7 @@ void Client::responseReceived()
             qDebug() << "[Client]: Connection accepted";
             state->setAccepted();
             sendCallingMessage();
-            //TODO Starts voice here
+            //TODO Starts voice here, not in QML
             state->setTalking(); //TODO Only change to TALKING state after start voice conversation
             break;
         case REJECT:
