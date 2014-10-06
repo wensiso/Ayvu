@@ -63,6 +63,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     // is loaded and the application scene is set.
     new ApplicationUI(&app);
 
+
     // Enter the application main event loop.
     return Application::exec();
 }

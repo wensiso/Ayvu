@@ -63,7 +63,8 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/net/session/client.cpp) \
         $$quote($$BASEDIR/src/net/session/connection.cpp) \
         $$quote($$BASEDIR/src/net/session/server.cpp) \
-        $$quote($$BASEDIR/src/net/session/state.cpp)
+        $$quote($$BASEDIR/src/net/session/state.cpp) \
+        $$quote($$BASEDIR/src/net/ssdp/ssdp.cpp)
 
     HEADERS += \
         $$quote($$BASEDIR/src/appinfo.h) \
@@ -78,10 +79,13 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/net/session/client.h) \
         $$quote($$BASEDIR/src/net/session/connection.h) \
         $$quote($$BASEDIR/src/net/session/server.h) \
-        $$quote($$BASEDIR/src/net/session/state.h)
+        $$quote($$BASEDIR/src/net/session/state.h) \
+        $$quote($$BASEDIR/src/net/ssdp/ssdp.h) \
+        $$quote($$BASEDIR/src/net/ssdp/ssdpprotocol.h)
 }
 
 INCLUDEPATH += $$quote($$BASEDIR/src/net) \
+    $$quote($$BASEDIR/src/net/ssdp) \
     $$quote($$BASEDIR/src/net/session) \
     $$quote($$BASEDIR/src/net/data) \
     $$quote($$BASEDIR/src) \
@@ -118,6 +122,11 @@ lupdate_inclusion {
         $$quote($$BASEDIR/../src/net/session/*.cc) \
         $$quote($$BASEDIR/../src/net/session/*.cpp) \
         $$quote($$BASEDIR/../src/net/session/*.cxx) \
+        $$quote($$BASEDIR/../src/net/ssdp/*.c) \
+        $$quote($$BASEDIR/../src/net/ssdp/*.c++) \
+        $$quote($$BASEDIR/../src/net/ssdp/*.cc) \
+        $$quote($$BASEDIR/../src/net/ssdp/*.cpp) \
+        $$quote($$BASEDIR/../src/net/ssdp/*.cxx) \
         $$quote($$BASEDIR/../assets/*.qml) \
         $$quote($$BASEDIR/../assets/*.js) \
         $$quote($$BASEDIR/../assets/*.qs) \

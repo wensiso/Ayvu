@@ -8,34 +8,49 @@
 #ifndef APPINFO_H_
 #define APPINFO_H_
 
+#include <QObject>
 #include <bb/device/HardwareInfo>
+
+#include <ssdp.h>
 
 #define DEFAULT_USERNAME "user"
 
 namespace ayvu
 {
 
-class AppInfo
+class AppInfo : public QObject
 {
+Q_OBJECT
 public:
-    static AppInfo *getInstance()
+    static AppInfo *getInstance(QObject *parent=0)
     {
         if (!instance)
-            instance = new AppInfo();
+            instance = new AppInfo(parent);
         return instance;
     }
 
     const QString getUsername() const;
     void setUsername(const QString& username);
 
+signals:
+    void newDevice(QString);
+
+private slots:
+    void addNewDevice(QString);
+    void removeDevice(QString);
+
 private:
     static AppInfo *instance; //Singleton
-    AppInfo();
+    AppInfo(QObject *parent=0);
 
     bb::device::HardwareInfo m_deviceinfo;
 
+    SSDP *ssdp;
+    QList<QString> *devices;
+
     QString m_username;
     QString m_devicename;
+
 };
 
 } /* namespace ayvu */
