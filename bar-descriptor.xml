@@ -26,7 +26,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry 10 applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>com.example.Ayvu</id>
+    <id>com.wensiso.Ayvu</id>
 
     <!-- The name that is displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -46,13 +46,14 @@
 
     <!-- Description, displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-    <description>The Ayvu application</description>
+    <description>The Ayvu Wi-fi Wlakie-Talkie application</description>
 
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Example Inc.</author>
+    <author>Wendell Soares</author>
+    <category>core.media</category>
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm/o.le-v7-g/Ayvu" entry="true" type="Qnx/Elf">Ayvu</asset>
@@ -75,7 +76,8 @@
     <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
 
     <initialWindow>
-        <autoOrients>true</autoOrients>
+        <autoOrients>false</autoOrients>
+        <aspectRatio>portrait</aspectRatio>
         <systemChrome>none</systemChrome>
         <transparent>false</transparent>
     </initialWindow>
@@ -96,5 +98,14 @@
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
+    <env var="CASCADES_THEME" value="default"/>
+    
+    <permission>access_led_control</permission>
+    <permission>run_when_backgrounded</permission>
+    <permission>access_shared</permission>
+    <permission>record_audio</permission>
+    <permission>access_internet</permission>
+    <permission>read_device_identifying_information</permission>
+    <permission>post_notification</permission>
 
 </qnx>

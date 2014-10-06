@@ -21,7 +21,19 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/LocaleHandler>
 
+#include <network.h>
+#include <server.h>
+#include <client.h>
+#include <state.h>
+
+#include <audiocontrol.h>
+#include <datareceiver.h>
+#include <datasender.h>
+
 using namespace bb::cascades;
+using namespace ayvu;
+
+AudioControl* audioControl;
 
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         QObject(app)
@@ -43,6 +55,35 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     // Create scene document from main.qml asset, the parent is set
     // to ensure the document gets destroyed properly at shut down.
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
+
+    qmlRegisterType<Network>();
+    Network *network = new Network(this);
+    qml->setContextProperty("_network", network);
+
+    qmlRegisterType<State>();
+    State *state = State::getInstance();
+    qml->setContextProperty("_state", state);
+
+    qmlRegisterType<Client>();
+    Client *sessionClient = new Client(this);
+    qml->setContextProperty("_sessionClient", sessionClient);
+
+    qmlRegisterType<Server>();
+    Server *sessionServer = new Server(this);
+    qml->setContextProperty("_sessionServer", sessionServer);
+    sessionServer->start();
+
+    qmlRegisterType<AudioControl>();
+    audioControl = new AudioControl(this);
+    qml->setContextProperty("_audioControl", audioControl);
+
+    qmlRegisterType<DataSender>();
+    DataSender *audioSender = DataSender::getInstance();
+    qml->setContextProperty("_audioSender", audioSender);
+
+    qmlRegisterType<DataReceiver>();
+    DataReceiver *audioReceiver = DataReceiver::getInstance();
+    qml->setContextProperty("_audioReceiver", audioReceiver);
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();
