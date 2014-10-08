@@ -28,6 +28,10 @@ Q_OBJECT
 public:
     explicit SSDP(int interval = 1, QObject *parent = 0);
     ~SSDP();
+
+    void init();
+    bool isInitialized() const;
+
     void start();
     void stop();
     void doubleDiscover(const QString &type = QString("ayvu:all"),
@@ -38,13 +42,13 @@ public:
 
 private:
 
-    void init();
     void parseMessage(const QString &);
     QString *getValue(QMapIterator<QString, QString> &, QString);
 
     QTimer *discoverTimer;
     QUdpSocket *udpSocket;
     int interval;
+    bool initialized;
 
 private slots:
     void datagramReceived();
@@ -55,10 +59,13 @@ public slots:
             const QString &userAgent = QString("Ayvu Messenger/1.0"));
 
 signals:
-    void newDeviceReceived(const QString &);
+    void newDeviceFound(const QString &);
+    void deviceAlive(const QString &);
     void byebyeReceived(const QString &);
     void msearchReceived(const QString &);
     void setupEvent(const QString &);
+
+    void multicastError();
 
 };
 

@@ -21,6 +21,9 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/LocaleHandler>
 
+#include <bb/system/SystemDialog>
+#include <bb/system/SystemUiResult>
+
 #include <network.h>
 #include <server.h>
 #include <client.h>
@@ -31,9 +34,9 @@
 #include <datasender.h>
 
 using namespace bb::cascades;
-using namespace ayvu;
+using namespace bb::system;
 
-AudioControl* audioControl;
+using namespace ayvu;
 
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         QObject(app)
@@ -56,9 +59,14 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     // to ensure the document gets destroyed properly at shut down.
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
+    this->err_dialog = new SystemDialog("Ok", "Cancel", this);
+
     qmlRegisterType<Network>();
-    Network *network = new Network(this);
+    Network *network = Network::getInstance(this);
     qml->setContextProperty("_network", network);
+
+    Q_ASSERT(connect(network, SIGNAL(networkError()), this, SLOT(onMulticastError())));
+    network->startDeviceDiscovery();
 
     qmlRegisterType<State>();
     State *state = State::getInstance();
@@ -73,16 +81,12 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     qml->setContextProperty("_sessionServer", sessionServer);
     sessionServer->start();
 
-    qmlRegisterType<AudioControl>();
-    audioControl = new AudioControl(this);
-    qml->setContextProperty("_audioControl", audioControl);
-
     qmlRegisterType<DataSender>();
-    DataSender *audioSender = DataSender::getInstance();
+    DataSender *audioSender = DataSender::getInstance(this);
     qml->setContextProperty("_audioSender", audioSender);
 
     qmlRegisterType<DataReceiver>();
-    DataReceiver *audioReceiver = DataReceiver::getInstance();
+    DataReceiver *audioReceiver = DataReceiver::getInstance(this);
     qml->setContextProperty("_audioReceiver", audioReceiver);
 
     // Create root object for the UI
@@ -90,6 +94,32 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
 
     // Set created root object as the application scene
     app->setScene(root);
+}
+
+void ApplicationUI::onMulticastError()
+{
+    err_dialog->setTitle("Multicast error");
+    err_dialog->setBody("Ayvu cannot join in multicast group. Are you connected in a Wi-Fi network?");
+    err_dialog->setEmoticonsEnabled(true);
+
+    Q_ASSERT(connect(err_dialog,
+             SIGNAL(finished(bb::system::SystemUiResult::Type)),
+             this,
+             SLOT(onErrDialogFinished(bb::system::SystemUiResult::Type))));
+
+   err_dialog->show();
+
+}
+
+void ApplicationUI::onMulticastErrorDialogFinished(int result)
+{
+    //TODO Treat results
+    Q_UNUSED(result);
+//    if(result==SystemUiResult::Type::ConfirmButtonSelection)
+//        ;
+//    else
+//        ;
+
 }
 
 void ApplicationUI::onSystemLanguageChanged()

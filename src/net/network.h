@@ -14,6 +14,8 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 
+#include <ssdp.h>
+
 //TODO Pegar hostname do usuario
 #define HOSTNAME "BlackberryZ10"
 
@@ -58,15 +60,43 @@ enum MessageType {
 
 MessageType getMessageType(const QString &);
 
+class SSDP;
+
 class Network : public QObject
 {
 	Q_OBJECT
 
 public:
-	Network(QObject *parent = 0);
+
+	static Network *getInstance(QObject *parent=0)
+	{
+	    if (!instance)
+	        instance = new Network(parent);
+	    return instance;
+	}
 	static QHostAddress getValidIP();
 	Q_INVOKABLE static QString getValidIPStr();
 	Q_INVOKABLE static QString getHostname();
+
+	void startDeviceDiscovery();
+	void stopDeviceDiscovery();
+
+signals:
+    void networkError();
+    void devicesUpdated(QList<QString>*);
+
+private slots:
+    void addDevice(QString);
+    void deviceAlive(QString);
+    void removeDevice(QString);
+
+private:
+    static Network *instance;
+    Network(QObject *parent = 0);
+
+
+    SSDP *ssdp;
+    QList<QString> *devices;
 
 };
 

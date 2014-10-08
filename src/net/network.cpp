@@ -9,6 +9,48 @@
 
 namespace ayvu {
 
+Network *Network::instance = 0;
+
+Network::Network(QObject* parent):QObject(parent) {
+    devices = new QList<QString>();
+
+    ssdp = new SSDP(30);
+
+    Q_ASSERT(connect(ssdp, SIGNAL(newDeviceFound(QString)), this, SLOT(addDevice(QString))));
+    Q_ASSERT(connect(ssdp, SIGNAL(deviceAlive(QString)), this, SLOT(deviceAlive(QString))));
+    Q_ASSERT(connect(ssdp, SIGNAL(byebyeReceived(QString)), this, SLOT(removeDevice(QString))));
+
+    Q_ASSERT(connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(networkError())));
+}
+
+void Network::startDeviceDiscovery()
+{
+    ssdp->init();
+    ssdp->start();
+}
+
+void Network::stopDeviceDiscovery()
+{
+    ssdp->stop();
+}
+
+
+void Network::addDevice(QString device)
+{
+    devices->append(device);
+}
+
+void Network::deviceAlive(QString device)
+{
+    //TODO Tratar alive
+    devices->append(device);
+}
+
+void Network::removeDevice(QString device)
+{
+    devices->removeOne(device);
+}
+
 MessageType getMessageType(const QString &message) {
     if (message.startsWith(PROTO_INVITE))
         return INVITE;
@@ -21,9 +63,6 @@ MessageType getMessageType(const QString &message) {
     if(message.startsWith(PROTO_FINISH))
         return FINISH;
     return ERROR;
-}
-
-Network::Network(QObject* parent):QObject(parent) {
 }
 
 QHostAddress Network::getValidIP()

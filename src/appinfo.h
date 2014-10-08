@@ -11,8 +11,6 @@
 #include <QObject>
 #include <bb/device/HardwareInfo>
 
-#include <ssdp.h>
-
 #define DEFAULT_USERNAME "user"
 
 namespace ayvu
@@ -32,21 +30,11 @@ public:
     const QString getUsername() const;
     void setUsername(const QString& username);
 
-signals:
-    void newDevice(QString);
-
-private slots:
-    void addNewDevice(QString);
-    void removeDevice(QString);
-
 private:
     static AppInfo *instance; //Singleton
     AppInfo(QObject *parent=0);
 
     bb::device::HardwareInfo m_deviceinfo;
-
-    SSDP *ssdp;
-    QList<QString> *devices;
 
     QString m_username;
     QString m_devicename;

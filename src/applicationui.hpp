@@ -26,6 +26,11 @@ namespace bb
         class Application;
         class LocaleHandler;
     }
+    namespace system
+    {
+        class SystemDialog;
+        class SystemUiResult;
+    }
 }
 
 class QTranslator;
@@ -44,9 +49,14 @@ public:
     virtual ~ApplicationUI() { }
 private slots:
     void onSystemLanguageChanged();
+
+    void onMulticastError();
+    void onMulticastErrorDialogFinished(int);
+
 private:
     QTranslator* m_pTranslator;
     bb::cascades::LocaleHandler* m_pLocaleHandler;
+    bb::system::SystemDialog *err_dialog;
 };
 
 #endif /* ApplicationUI_HPP_ */

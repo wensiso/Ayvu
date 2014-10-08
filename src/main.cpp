@@ -24,12 +24,13 @@
 #include <Qt/qdeclarativedebug.h>
 #include <iostream>
 
+#include <audiocontrol.h>
+
 using namespace bb::cascades;
 
 namespace ayvu {
     qint64 clock_skew = 0;
 }
-
 
 static void customMessageHandler(QtMsgType type, const char *message)
 {
@@ -56,6 +57,8 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 
 	qmlRegisterType<bb::device::Led>("bb.device", 1, 0, "Led");
 	qmlRegisterUncreatableType<bb::device::LedColor>("bb.device", 1, 0, "LedColor", "");
+
+	qmlRegisterType<ayvu::AudioControl>("ayvu.audio", 1, 0, "AudioControl");
 
     Application app(argc, argv);
 

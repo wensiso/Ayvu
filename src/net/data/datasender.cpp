@@ -7,7 +7,8 @@ namespace ayvu {
 DataSender *DataSender::instance = 0;
 qint64 DataSender::seq = 0;
 
-DataSender::DataSender() {
+DataSender::DataSender(QObject *parent) : QObject(parent)
+{
 	this->m_udpSender = new QUdpSocket(this);
 	this->m_address = QHostAddress::LocalHost;
 }

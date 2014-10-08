@@ -4,7 +4,8 @@ namespace ayvu {
 
 DataReceiver *DataReceiver::instance = 0;
 
-DataReceiver::DataReceiver() {
+DataReceiver::DataReceiver(QObject *parent) : QObject(parent)
+{
 	m_udpListener = new QUdpSocket(this);
 	m_datagram = new QByteArray();
 	m_logfileCreated = false;

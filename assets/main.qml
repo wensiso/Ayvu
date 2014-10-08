@@ -18,9 +18,9 @@ import bb.cascades 1.0
 import bb.system 1.0
 import bb.device 1.0
 
+import ayvu.audio 1.0
+
 Page {
-    
-    
     
     property int state: _state.state
     
@@ -45,7 +45,7 @@ Page {
         console.debug("rejected: " + rejected)
         console.debug("acepted: " + accepted) 
     }
-    
+        
     onStateChanged: {
         printAllStates()
         
@@ -220,6 +220,9 @@ Page {
         Led {
             id: ledController
             color: LedColor.Blue
+        },
+        AudioControl {
+            id: _audioControl
         },
         SystemDialog {
             id: incommingCallDialog

@@ -31,9 +31,9 @@ class DataReceiver: public QObject {
 	Q_OBJECT
 public:
 
-	static DataReceiver *getInstance() {
+	static DataReceiver *getInstance(QObject *parent=0) {
 		if (!instance)
-			instance = new DataReceiver();
+			instance = new DataReceiver(parent);
 		return instance;
 	}
 
@@ -48,7 +48,7 @@ private slots:
 
 private:
 	static DataReceiver *instance;  //Singleton
-	DataReceiver();
+	DataReceiver(QObject *parent=0);
 
 	void createLogFile();
 	void printLatency(qint64, qint64);

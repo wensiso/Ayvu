@@ -13,10 +13,10 @@ namespace ayvu
 SSDP::SSDP(int interval, QObject *parent) :
         QObject(parent) {
 
+    this->initialized = false;
     this->interval = interval;
     this->discoverTimer = new QTimer(this);
     this->udpSocket = new QUdpSocket(this);
-    this->init();
 }
 
 SSDP::~SSDP() {
@@ -25,6 +25,9 @@ SSDP::~SSDP() {
 }
 
 void SSDP::init() {
+
+    if(this->initialized)
+        return;
 
     qDebug() << "SSDP: initing...";
     QHostAddress groupAddress = QHostAddress(SSDP_ADDR);
@@ -36,16 +39,30 @@ void SSDP::init() {
     }
 
     // Tell the UDP socket which multicast group it should join
-    Q_ASSERT_X(udpSocket->joinMulticastGroup(groupAddress), "SSDP::init()", "Could not join multicast group.");
+    if(!udpSocket->joinMulticastGroup(groupAddress))
+    {
+        qWarning() << "Error on joinMulticastGroup";
+        emit multicastError();
+    }
 
     /**
      * Create signal/slot connection to invoke datagramReceived() whenever
      * a new multicast datagram is received by the socket.
      */
     Q_ASSERT(connect(udpSocket, SIGNAL(readyRead()), this, SLOT(datagramReceived())));
+    this->initialized = true;
 }
 
+bool SSDP::isInitialized() const
+{
+    return this->initialized;
+}
+
+
 void SSDP::start() {
+
+    Q_ASSERT(this->initialized);
+
     this->discoverTimer->start(interval * 1000);
     Q_ASSERT(connect(discoverTimer, SIGNAL(timeout()), this, SLOT(discover())));
 
@@ -144,7 +161,7 @@ void SSDP::parseMessage(const QString &message)
             {
                 //TODO tratar alive
 //                qDebug() << "Novo DEVICE!";
-                emit newDeviceReceived("NEW!");
+                emit deviceAlive("NEW!");
             }
             else if(v->startsWith(SSDP_BYEBYE_NTS, Qt::CaseInsensitive))
             {
@@ -164,7 +181,7 @@ void SSDP::parseMessage(const QString &message)
                 qDebug() << "Novo DEVICE!";
                 qDebug() << "V: " << *v;
                 qDebug() << "------------------\n" << message;
-                emit newDeviceReceived("NEW!");
+                emit newDeviceFound("NEW!");
             }
         }
     }

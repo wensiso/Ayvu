@@ -16,9 +16,9 @@ class DataSender: public QObject {
 	Q_OBJECT
 public:
 
-	static DataSender *getInstance() {
+	static DataSender *getInstance(QObject *parent=0) {
 		if (!instance)
-			instance = new DataSender();
+			instance = new DataSender(parent);
 		return instance;
 	}
 
@@ -32,7 +32,7 @@ public:
 
 private:
 	static DataSender *instance;  //Singleton
-	DataSender();
+	DataSender(QObject *parent=0);
 
 	static qint64 seq;
 
