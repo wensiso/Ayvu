@@ -38,19 +38,26 @@ config_pri_assets {
     OTHER_FILES += \
         $$quote($$BASEDIR/assets/About.qml) \
         $$quote($$BASEDIR/assets/Balloon.qml) \
+        $$quote($$BASEDIR/assets/Help.qml) \
+        $$quote($$BASEDIR/assets/LabelLink.qml) \
+        $$quote($$BASEDIR/assets/Settings.qml) \
         $$quote($$BASEDIR/assets/images/background.png) \
         $$quote($$BASEDIR/assets/images/balloon_left.png) \
         $$quote($$BASEDIR/assets/images/balloon_right.png) \
         $$quote($$BASEDIR/assets/images/ic_info.png) \
         $$quote($$BASEDIR/assets/images/ic_microphone.png) \
         $$quote($$BASEDIR/assets/images/ic_microphone_mute.png) \
+        $$quote($$BASEDIR/assets/images/ic_network_connections.png) \
+        $$quote($$BASEDIR/assets/images/ic_no_connections.png) \
+        $$quote($$BASEDIR/assets/images/ic_open.png) \
+        $$quote($$BASEDIR/assets/images/ic_review.png) \
+        $$quote($$BASEDIR/assets/images/ic_share.png) \
         $$quote($$BASEDIR/assets/images/icon114x114.png) \
         $$quote($$BASEDIR/assets/main.qml)
 }
 
 config_pri_source_group1 {
     SOURCES += \
-        $$quote($$BASEDIR/src/appinfo.cpp) \
         $$quote($$BASEDIR/src/applicationui.cpp) \
         $$quote($$BASEDIR/src/audio/audiocontrol.cpp) \
         $$quote($$BASEDIR/src/audio/audiopcm.cpp) \
@@ -67,7 +74,7 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/net/ssdp/ssdp.cpp)
 
     HEADERS += \
-        $$quote($$BASEDIR/src/appinfo.h) \
+        $$quote($$BASEDIR/src/applicationinfo.hpp) \
         $$quote($$BASEDIR/src/applicationui.hpp) \
         $$quote($$BASEDIR/src/audio/audiocontrol.h) \
         $$quote($$BASEDIR/src/audio/audiopcm.h) \

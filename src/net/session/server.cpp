@@ -16,13 +16,15 @@ const QString Server::genericResponse = "%1 %2 %3\r\n"
         PROTO_CAUSE ": %9"
         "\r\n";
 
-Server::Server(QObject *parent)
+Server::Server(QSettings *settings, QObject *parent)
      : QTcpServer(parent)
  {
     m_connection = 0;
     state = State::getInstance();
     m_clientName = "None";
     m_clientAddress = "None";
+
+    m_settings = settings;
 
     int c = connect(this, SIGNAL(newConnection(Connection*)), this, SLOT(onNewConnection(Connection*)));
     Q_ASSERT(c);
@@ -42,6 +44,12 @@ void Server::start()
         return;
     }
     Q_ASSERT(ret);
+}
+
+void Server::stop()
+{
+    if(this->isListening())
+        this->close();
 }
 
  void Server::incomingConnection(int socketDescriptor)
@@ -90,5 +98,11 @@ QString Server::getClientAddress() const
     return m_clientAddress;
 }
 
+QString Server::getUsername()
+{
+    return m_settings->value("username").toString() + "@" + m_settings->value("devicename").toString();
+}
+
 } /* namespace ayvu */
+
 

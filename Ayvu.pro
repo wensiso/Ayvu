@@ -5,4 +5,5 @@ CONFIG += qt warn_on cascades10
 QT += network
 LIBS += -laudio_manager -lasound -lbbmultimedia -lbbsystem -lbbdevice
 
+include(build/build.pri)
 include(config.pri)

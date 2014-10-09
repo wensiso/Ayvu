@@ -18,13 +18,13 @@ const QString Client::genericRequest = "%1 %2 %3\r\n"
         PROTO_CALL_ID ": %8\r\n"
         "\r\n";
 
-Client::Client(QObject* parent) :
+Client::Client(QSettings *settings, QObject* parent) :
         QObject(parent)
 {
     m_socket = new QTcpSocket(this);
     server_address = QHostAddress::LocalHost;
 
-    appinfo = AppInfo::getInstance();
+    m_settings = settings;
     state = State::getInstance();
 
     m_hostname = Network::getHostname();
@@ -81,7 +81,7 @@ void Client::send(const QString& message)
 
 void Client::sendInviteMessage()
 {
-    QString msg = genericRequest.arg(PROTO_INVITE, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+    QString msg = genericRequest.arg(PROTO_INVITE, PROTO_AUDIO_TYPE, PROTO_VERSION, getUsername(),
             m_hostname, Network::getValidIPStr(), "12345");
     send(msg);
 }
@@ -89,14 +89,14 @@ void Client::sendInviteMessage()
 void Client::sendCallingMessage()
 {
     qDebug() << "[Client] Sending calling...";
-    QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+    QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, getUsername(),
             m_hostname, my_address, "12345");
     send(msg);
 }
 
 void Client::sendFinishMessage()
 {
-    QString msg = genericRequest.arg(PROTO_FINISH, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+    QString msg = genericRequest.arg(PROTO_FINISH, PROTO_AUDIO_TYPE, PROTO_VERSION, getUsername(),
             m_hostname, my_address, "12345");
     send(msg);
 }
@@ -145,6 +145,12 @@ void Client::finishedSession()
 {
     qDebug() << "[SessionClient]: finishedSession";
 }
+
+QString Client::getUsername()
+{
+    return m_settings->value("username").toString() + "@" + m_settings->value("devicename").toString();
+}
+
 
 } /* namespace ayvu */
 

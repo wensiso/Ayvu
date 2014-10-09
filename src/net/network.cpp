@@ -12,21 +12,26 @@ namespace ayvu {
 Network *Network::instance = 0;
 
 Network::Network(QObject* parent):QObject(parent) {
-    devices = new QList<QString>();
 
+    devices = new QList<QString>();
     ssdp = new SSDP(30);
 
     Q_ASSERT(connect(ssdp, SIGNAL(newDeviceFound(QString)), this, SLOT(addDevice(QString))));
     Q_ASSERT(connect(ssdp, SIGNAL(deviceAlive(QString)), this, SLOT(deviceAlive(QString))));
     Q_ASSERT(connect(ssdp, SIGNAL(byebyeReceived(QString)), this, SLOT(removeDevice(QString))));
 
-    Q_ASSERT(connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(networkError())));
+    Q_ASSERT(connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(discoveryError())));
+
+    testConnection();
 }
 
 void Network::startDeviceDiscovery()
 {
-    ssdp->init();
-    ssdp->start();
+    if(testConnection())
+    {
+        ssdp->init();
+        ssdp->start();
+    }
 }
 
 void Network::stopDeviceDiscovery()
@@ -63,6 +68,16 @@ MessageType getMessageType(const QString &message) {
     if(message.startsWith(PROTO_FINISH))
         return FINISH;
     return ERROR;
+}
+
+bool Network::testConnection()
+{
+    QNetworkConfigurationManager mgr;
+    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(
+            QNetworkConfiguration::Active);
+
+    m_connected = (activeConfigs.count() > 0) ? mgr.isOnline() : false;
+    return m_connected;
 }
 
 QHostAddress Network::getValidIP()

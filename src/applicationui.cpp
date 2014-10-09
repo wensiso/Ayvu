@@ -21,17 +21,14 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/LocaleHandler>
 
+#include <bb/cascades/InvokeActionItem>
+#include <bb/cascades/InvokeQuery>
+#include <bb/system/InvokeManager>
+#include <bb/system/InvokeRequest>
+#include <bb/system/InvokeTargetReply>
+
 #include <bb/system/SystemDialog>
 #include <bb/system/SystemUiResult>
-
-#include <network.h>
-#include <server.h>
-#include <client.h>
-#include <state.h>
-
-#include <audiocontrol.h>
-#include <datareceiver.h>
-#include <datasender.h>
 
 using namespace bb::cascades;
 using namespace bb::system;
@@ -41,53 +38,33 @@ using namespace ayvu;
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         QObject(app)
 {
+    ApplicationInfo::registerQmlTypes();
+    this->initSettings();
+
     // prepare the localization
     m_pTranslator = new QTranslator(this);
     m_pLocaleHandler = new LocaleHandler(this);
-
     bool res = QObject::connect(m_pLocaleHandler, SIGNAL(systemLanguageChanged()), this, SLOT(onSystemLanguageChanged()));
-    // This is only available in Debug builds
     Q_ASSERT(res);
-    // Since the variable is not used in the app, this is added to avoid a
-    // compiler warning
     Q_UNUSED(res);
-
-    // initial load
     onSystemLanguageChanged();
 
-    // Create scene document from main.qml asset, the parent is set
-    // to ensure the document gets destroyed properly at shut down.
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
+    qml->setContextProperty("_app", this);
+    // Create a SceneCover and set the application cover
+//    ActiveFrameQML *activeFrame = new ActiveFrameQML();
+//    Application::instance()->setCover(activeFrame);
+    this->registerQmlTypes(qml);
 
     this->err_dialog = new SystemDialog("Ok", "Cancel", this);
 
-    qmlRegisterType<Network>();
-    Network *network = Network::getInstance(this);
-    qml->setContextProperty("_network", network);
+    Q_ASSERT(connect(m_network, SIGNAL(discoveryError()), this, SLOT(onDiscoveryError())));
+    m_network->startDeviceDiscovery();
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), m_network, SLOT(testConnection()));
+    m_timer->start(5000);
 
-    Q_ASSERT(connect(network, SIGNAL(networkError()), this, SLOT(onMulticastError())));
-    network->startDeviceDiscovery();
-
-    qmlRegisterType<State>();
-    State *state = State::getInstance();
-    qml->setContextProperty("_state", state);
-
-    qmlRegisterType<Client>();
-    Client *sessionClient = new Client(this);
-    qml->setContextProperty("_sessionClient", sessionClient);
-
-    qmlRegisterType<Server>();
-    Server *sessionServer = new Server(this);
-    qml->setContextProperty("_sessionServer", sessionServer);
-    sessionServer->start();
-
-    qmlRegisterType<DataSender>();
-    DataSender *audioSender = DataSender::getInstance(this);
-    qml->setContextProperty("_audioSender", audioSender);
-
-    qmlRegisterType<DataReceiver>();
-    DataReceiver *audioReceiver = DataReceiver::getInstance(this);
-    qml->setContextProperty("_audioReceiver", audioReceiver);
+    m_sessionServer->start();
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();
@@ -96,7 +73,58 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     app->setScene(root);
 }
 
-void ApplicationUI::onMulticastError()
+ApplicationUI::~ApplicationUI()
+{
+    qDebug() << "Destructor";
+    m_timer->stop();
+    m_network->stopDeviceDiscovery();
+
+    m_sessionClient->sendFinishMessage();
+    m_sessionServer->stop();
+}
+
+void ApplicationUI::initSettings()
+{
+    m_settings = new QSettings("Wendell", "Ayvu", this);
+    if (m_settings->contains("username") && m_settings->contains("devicename"))
+    {
+        m_username = m_settings->value("username").toString();
+        m_deviceName = m_settings->value("devicename").toString();
+    } else {
+        m_username = DEFAULT_USERNAME;
+        m_deviceName = DEFAULT_DEVICENAME;
+        updateSettings();
+    }
+}
+
+void ApplicationUI::registerQmlTypes(QmlDocument *qml)
+{
+    qmlRegisterType<Network>();
+    m_network = Network::getInstance(this);
+    qml->setContextProperty("_network", m_network);
+
+    qmlRegisterType<State>();
+    m_state = State::getInstance();
+    qml->setContextProperty("_state", m_state);
+
+    qmlRegisterType<Client>();
+    m_sessionClient = new Client(m_settings, this);
+    qml->setContextProperty("_sessionClient", m_sessionClient);
+
+    qmlRegisterType<Server>();
+    m_sessionServer = new Server(m_settings, this);
+    qml->setContextProperty("_sessionServer", m_sessionServer);
+
+    qmlRegisterType<DataSender>();
+    m_audioSender = DataSender::getInstance(this);
+    qml->setContextProperty("_audioSender", m_audioSender);
+
+    qmlRegisterType<DataReceiver>();
+    m_audioReceiver = DataReceiver::getInstance(this);
+    qml->setContextProperty("_audioReceiver", m_audioReceiver);
+}
+
+void ApplicationUI::onDiscoveryError()
 {
     err_dialog->setTitle("Multicast error");
     err_dialog->setBody("Ayvu cannot join in multicast group. Are you connected in a Wi-Fi network?");
@@ -111,7 +139,7 @@ void ApplicationUI::onMulticastError()
 
 }
 
-void ApplicationUI::onMulticastErrorDialogFinished(int result)
+void ApplicationUI::onDiscoveryErrorDialogFinished(int result)
 {
     //TODO Treat results
     Q_UNUSED(result);
@@ -132,3 +160,60 @@ void ApplicationUI::onSystemLanguageChanged()
         QCoreApplication::instance()->installTranslator(m_pTranslator);
     }
 }
+
+void ApplicationUI::callAppWorldVendorCard() {
+    InvokeManager* invokeManager = new InvokeManager();
+    InvokeRequest cardRequest;
+    cardRequest.setTarget("sys.appworld"); // Aqui define o target~;
+    cardRequest.setAction("bb.action.OPEN");
+    cardRequest.setUri("appworld://vendor/82234"); // id vendor Wendell: 82234
+    InvokeTargetReply* reply = invokeManager->invoke(cardRequest);
+    reply->setParent(this);
+}
+
+void ApplicationUI::postAReview() {
+    InvokeManager* invokeManager = new InvokeManager();
+    InvokeRequest cardRequest;
+    cardRequest.setTarget("sys.appworld"); // Aqui define o target~;
+    cardRequest.setAction("bb.action.OPEN");
+    cardRequest.setUri("appworld://content/37260887"); // id FeetFit: 37260887
+    InvokeTargetReply* reply = invokeManager->invoke(cardRequest);
+    reply->setParent(this);
+}
+
+void ApplicationUI::callSettingsCard(QString uri) {
+    InvokeManager* invokeManager = new InvokeManager();
+    InvokeRequest cardRequest;
+    cardRequest.setTarget("sys.settings.target"); // Aqui define o target~;
+    cardRequest.setAction("bb.action.OPEN");
+    cardRequest.setMimeType("settings/view");
+    cardRequest.setUri(uri);
+    InvokeTargetReply* reply = invokeManager->invoke(cardRequest);
+    reply->setParent(this);
+}
+
+void ApplicationUI::updateSettings() {
+    m_settings->setValue("username", m_username);
+    m_settings->setValue("devicename", m_deviceName);
+    m_settings->sync();
+}
+
+//const QString& ApplicationUI::getDeviceName() const
+//{
+//    return m_deviceName;
+//}
+//
+//void ApplicationUI::setDeviceName(const QString& deviceName)
+//{
+//    m_deviceName = deviceName;
+//}
+//
+//const QString& ApplicationUI::getUsername() const
+//{
+//    return m_username;
+//}
+//
+//void ApplicationUI::setUsername(const QString& username)
+//{
+//    m_username = username;
+//}

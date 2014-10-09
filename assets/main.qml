@@ -64,17 +64,33 @@ Page {
             incommingCallDialog.show()            
         }
     }
-    
+        
     id: mainScreen
     
     Menu.definition: MenuDefinition {
-        
+        settingsAction: SettingsActionItem {
+            onTriggered: {
+                settingsSheet.createObject().open();
+            }
+        }
+        helpAction: HelpActionItem {
+            onTriggered: {
+                helpSheet.createObject().open();
+            }
+        }
         actions: [
             ActionItem {
                 title: "About"
                 imageSource: "asset:///images/ic_info.png"
                 onTriggered: {
-                    aboutSheet.createObject().open();
+                    aboutSheet.createObject().open()
+                }
+            },
+            ActionItem {
+                imageSource: "asset:///images/ic_share.png"
+                title: "Share"
+                onTriggered: {
+                    invocation.trigger("bb.action.SHARE")
                 }
             }
         ]
@@ -205,9 +221,26 @@ Page {
     }
     
     attachedObjects: [
+        Invocation {
+            id: invocation
+            query {
+                mimeType: "text/plain"
+                data: "Use BRisa Binary Light App for BlackBerry 10! Check BRisa Binary Light in the BlackBerry World! Find in http://appworld.blackberry.com/webstore/content/37260887"
+            }
+        },
         ComponentDefinition {
             id: aboutSheet
             About {
+            }
+        },
+        ComponentDefinition {
+            id: settingsSheet
+            Settings {
+            }
+        },
+        ComponentDefinition {
+            id: helpSheet
+            Help {
             }
         },
         SystemToast {

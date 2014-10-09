@@ -4,12 +4,12 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../assets/About.qml" line="9"/>
+        <location filename="../assets/About.qml" line="15"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/About.qml" line="63"/>
+        <location filename="../assets/About.qml" line="84"/>
         <source>Developers</source>
         <translation type="unfinished"></translation>
     </message>

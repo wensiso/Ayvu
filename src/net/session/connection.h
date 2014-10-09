@@ -12,7 +12,6 @@
 #include <QHostAddress>
 #include <QStringList>
 
-#include <appinfo.h>
 #include <server.h>
 #include <state.h>
 
@@ -46,7 +45,6 @@ private:
 	int parseFinishRequest(QHash<QString, QString> &request);
 
 	State *state;
-	AppInfo *appinfo;
 	Server *server;
 
 	QString proto_version;

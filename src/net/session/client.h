@@ -11,10 +11,10 @@
 #include <QObject>
 #include <QHostAddress>
 #include <QTcpSocket>
+#include <QSettings>
 
 #include <network.h>
 #include <state.h>
-#include <appinfo.h>
 
 namespace ayvu {
 
@@ -24,7 +24,7 @@ public:
 
     static const QString genericRequest;
 
-    Client(QObject *parent=0);
+    Client(QSettings *settings, QObject *parent=0);
 
     void setServerAddress(QHostAddress address);
     const QHostAddress& getServerAddress() const;
@@ -45,11 +45,13 @@ private slots:
 private:
     void initHandlers();
     void send(const QString &);
+    QString getUsername();
+    QString getDevicename();
 
     QTcpSocket *m_socket;
     QHostAddress server_address;
+    QSettings *m_settings;
 
-    AppInfo *appinfo;
     State *state;
 
     QString m_hostname;

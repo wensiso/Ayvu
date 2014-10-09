@@ -10,6 +10,7 @@
 
 #include <QTcpServer>
 #include <QString>
+#include <QSettings>
 
 #include <network.h>
 #include <connection.h>
@@ -29,8 +30,9 @@ public:
 
 	static const QString genericResponse;
 
-	Server(QObject *parent = 0);
+	Server(QSettings *settings, QObject *parent = 0);
 	void start();
+	void stop();
 
     Q_INVOKABLE void acceptCall();
     Q_INVOKABLE void rejectCall();
@@ -39,6 +41,9 @@ public:
     QString getClientAddress() const;
     void setClientAddress(const QString& clientAddress);
     void setClientName(const QString& clientName);
+
+    QString getUsername();
+    QString getDevicename();
 
 signals:
 	void newConnection(Connection*);
@@ -52,6 +57,8 @@ private slots:
     void onNewConnection(Connection*);
 
 private:
+
+    QSettings *m_settings;
     Connection *m_connection;
     State *state;
 

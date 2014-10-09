@@ -16,7 +16,6 @@ Connection::Connection(QObject *parent)
 : QTcpSocket(parent)
 {
     qDebug() << "[SERVER]: New connection...";
-    appinfo = AppInfo::getInstance();
     state = State::getInstance();
     server = dynamic_cast<Server*> (parent);
 
@@ -126,7 +125,7 @@ bool Connection::sendAcceptMessage()
     qDebug() << "[SERVER]: Accepting connection";
     QString media_host = Network::getValidIPStr() + ":" + QString::number(DATA_PORT);
 
-    QString msg = Server::genericResponse.arg(PROTO_ACCEPT, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+    QString msg = Server::genericResponse.arg(PROTO_ACCEPT, PROTO_AUDIO_TYPE, PROTO_VERSION, server->getUsername(),
             Network::getHostname(), media_host, "12345");
     return sendMessage(msg);
 }
@@ -134,7 +133,7 @@ bool Connection::sendAcceptMessage()
 bool Connection::sendRejectMessage(const QString &cause)
 {
     qDebug() << "[SERVER]: Rejecting connection: " << cause;
-    QString msg = Server::genericResponse.arg(PROTO_REJECT, PROTO_AUDIO_TYPE, PROTO_VERSION, appinfo->getUsername(),
+    QString msg = Server::genericResponse.arg(PROTO_REJECT, PROTO_AUDIO_TYPE, PROTO_VERSION, server->getUsername(),
             Network::getHostname(), Network::getValidIPStr(), "12345", cause);
     return sendMessage(msg);
 }

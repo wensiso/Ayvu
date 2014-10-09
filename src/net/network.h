@@ -9,10 +9,13 @@
 #define NETWORK_H_
 
 #include <QList>
+#include <QTcpSocket>
+#include <QHostAddress>
+
 #include <QNetworkInterface>
 #include <QNetworkAddressEntry>
-#include <QHostAddress>
-#include <QTcpSocket>
+#include <QNetworkConfiguration>
+#include <QNetworkConfigurationManager>
 
 #include <ssdp.h>
 
@@ -74,7 +77,8 @@ public:
 	        instance = new Network(parent);
 	    return instance;
 	}
-	static QHostAddress getValidIP();
+
+    static QHostAddress getValidIP();
 	Q_INVOKABLE static QString getValidIPStr();
 	Q_INVOKABLE static QString getHostname();
 
@@ -82,8 +86,12 @@ public:
 	void stopDeviceDiscovery();
 
 signals:
-    void networkError();
+    void onConnected();
+    void discoveryError();
     void devicesUpdated(QList<QString>*);
+
+public slots:
+    bool testConnection();
 
 private slots:
     void addDevice(QString);
@@ -94,6 +102,7 @@ private:
     static Network *instance;
     Network(QObject *parent = 0);
 
+    bool m_connected;
 
     SSDP *ssdp;
     QList<QString> *devices;
