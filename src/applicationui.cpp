@@ -27,9 +27,6 @@
 #include <bb/system/InvokeRequest>
 #include <bb/system/InvokeTargetReply>
 
-#include <bb/system/SystemDialog>
-#include <bb/system/SystemUiResult>
-
 using namespace bb::cascades;
 using namespace bb::system;
 
@@ -56,9 +53,6 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
 //    Application::instance()->setCover(activeFrame);
     this->registerQmlTypes(qml);
 
-    this->err_dialog = new SystemDialog("Ok", "Cancel", this);
-
-    Q_ASSERT(connect(m_network, SIGNAL(discoveryError()), this, SLOT(onDiscoveryError())));
     m_network->startDeviceDiscovery();
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), m_network, SLOT(testConnection()));
@@ -86,13 +80,11 @@ ApplicationUI::~ApplicationUI()
 void ApplicationUI::initSettings()
 {
     m_settings = new QSettings("Wendell", "Ayvu", this);
-    if (m_settings->contains("username") && m_settings->contains("devicename"))
+    if (m_settings->contains("username"))
     {
         m_username = m_settings->value("username").toString();
-        m_deviceName = m_settings->value("devicename").toString();
     } else {
         m_username = DEFAULT_USERNAME;
-        m_deviceName = DEFAULT_DEVICENAME;
         updateSettings();
     }
 }
@@ -100,7 +92,7 @@ void ApplicationUI::initSettings()
 void ApplicationUI::registerQmlTypes(QmlDocument *qml)
 {
     qmlRegisterType<Network>();
-    m_network = Network::getInstance(this);
+    m_network = Network::getInstance(m_settings, this);
     qml->setContextProperty("_network", m_network);
 
     qmlRegisterType<State>();
@@ -122,32 +114,6 @@ void ApplicationUI::registerQmlTypes(QmlDocument *qml)
     qmlRegisterType<DataReceiver>();
     m_audioReceiver = DataReceiver::getInstance(this);
     qml->setContextProperty("_audioReceiver", m_audioReceiver);
-}
-
-void ApplicationUI::onDiscoveryError()
-{
-    err_dialog->setTitle("Multicast error");
-    err_dialog->setBody("Ayvu cannot join in multicast group. Are you connected in a Wi-Fi network?");
-    err_dialog->setEmoticonsEnabled(true);
-
-    Q_ASSERT(connect(err_dialog,
-             SIGNAL(finished(bb::system::SystemUiResult::Type)),
-             this,
-             SLOT(onErrDialogFinished(bb::system::SystemUiResult::Type))));
-
-   err_dialog->show();
-
-}
-
-void ApplicationUI::onDiscoveryErrorDialogFinished(int result)
-{
-    //TODO Treat results
-    Q_UNUSED(result);
-//    if(result==SystemUiResult::Type::ConfirmButtonSelection)
-//        ;
-//    else
-//        ;
-
 }
 
 void ApplicationUI::onSystemLanguageChanged()
@@ -194,26 +160,15 @@ void ApplicationUI::callSettingsCard(QString uri) {
 
 void ApplicationUI::updateSettings() {
     m_settings->setValue("username", m_username);
-    m_settings->setValue("devicename", m_deviceName);
     m_settings->sync();
 }
 
-//const QString& ApplicationUI::getDeviceName() const
-//{
-//    return m_deviceName;
-//}
-//
-//void ApplicationUI::setDeviceName(const QString& deviceName)
-//{
-//    m_deviceName = deviceName;
-//}
-//
-//const QString& ApplicationUI::getUsername() const
-//{
-//    return m_username;
-//}
-//
-//void ApplicationUI::setUsername(const QString& username)
-//{
-//    m_username = username;
-//}
+const QString ApplicationUI::getUsername() const
+{
+    return m_username;
+}
+
+void ApplicationUI::setUsername(const QString& username)
+{
+    m_username = username;
+}

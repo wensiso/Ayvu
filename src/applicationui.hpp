@@ -33,7 +33,6 @@
 #include "applicationinfo.hpp"
 
 #define DEFAULT_USERNAME "user"
-#define DEFAULT_DEVICENAME "blackberry10"
 
 namespace bb
 {
@@ -68,16 +67,12 @@ public:
     Q_INVOKABLE void postAReview();
     Q_INVOKABLE void callSettingsCard(QString uri);
     Q_INVOKABLE void updateSettings();
-//    Q_INVOKABLE const QString& getDeviceName() const;
-//    Q_INVOKABLE void setDeviceName(const QString& deviceName);
-//    Q_INVOKABLE const QString& getUsername() const;
-//    Q_INVOKABLE void setUsername(const QString& username);
+
+    Q_INVOKABLE const QString getUsername() const;
+    Q_INVOKABLE void setUsername(const QString& username);
 
 private slots:
     void onSystemLanguageChanged();
-
-    void onDiscoveryError();
-    void onDiscoveryErrorDialogFinished(int);
 
 private:
 
@@ -89,10 +84,8 @@ private:
 
     QSettings *m_settings;
     QString m_username;
-    QString m_deviceName;
 
     bb::cascades::LocaleHandler* m_pLocaleHandler;
-    bb::system::SystemDialog *err_dialog;
 
     ayvu::Network *m_network;
     ayvu::State *m_state;

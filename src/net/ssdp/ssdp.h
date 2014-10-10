@@ -16,6 +16,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QMapIterator>
+#include <QSettings>
 
 #include <network.h>
 #include "ssdpprotocol.h"
@@ -26,7 +27,7 @@ class SSDP: public QObject {
 Q_OBJECT
 
 public:
-    explicit SSDP(int interval = 1, QObject *parent = 0);
+    explicit SSDP(int interval = 1, QString usn="", QObject *parent = 0);
     ~SSDP();
 
     void init();
@@ -48,6 +49,7 @@ private:
     QTimer *discoverTimer;
     QUdpSocket *udpSocket;
     int interval;
+    QString USN;
     bool initialized;
 
 private slots:

@@ -44,6 +44,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/background.png) \
         $$quote($$BASEDIR/assets/images/balloon_left.png) \
         $$quote($$BASEDIR/assets/images/balloon_right.png) \
+        $$quote($$BASEDIR/assets/images/ic_brightness_screen.png) \
         $$quote($$BASEDIR/assets/images/ic_info.png) \
         $$quote($$BASEDIR/assets/images/ic_microphone.png) \
         $$quote($$BASEDIR/assets/images/ic_microphone_mute.png) \

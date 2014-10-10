@@ -10,11 +10,13 @@
 namespace ayvu
 {
 
-SSDP::SSDP(int interval, QObject *parent) :
+SSDP::SSDP(int interval, QString usn, QObject *parent) :
         QObject(parent) {
 
     this->initialized = false;
     this->interval = interval;
+    this->USN = usn;
+
     this->discoverTimer = new QTimer(this);
     this->udpSocket = new QUdpSocket(this);
 }
@@ -138,6 +140,8 @@ void SSDP::parseMessage(const QString &message)
     QMapIterator<QString, QString> iter(request);
     QString *v;
 
+    QString username = "newuser"; //TODO Pegar meu user...
+
     if (message.startsWith(SSDP_SEARCH_METHOD, Qt::CaseInsensitive))
     {
         if((v = getValue(iter, "MAN")))
@@ -145,9 +149,9 @@ void SSDP::parseMessage(const QString &message)
             qDebug() << "Receiving discovery message: \n" << message;
             if(v->compare(SSDP_DISCOVER, Qt::CaseInsensitive)==0)
             {
-                //TODO Gerar USN e DATE
+                //TODO Gerar DATE
                 qDebug() << "Discovering received. Creating response...";
-                QString discoveryResponse = SSDP_DISCOVERY_AYVU_RESPONSE.arg(Network::getValidIPStr(), "usn:x", "ayvu:voice", "01/01/2001");
+                QString discoveryResponse = SSDP_DISCOVERY_AYVU_RESPONSE.arg(Network::getValidIPStr(), this->USN, "ayvu:voice", "01/01/2001");
                 udpSocket->writeDatagram(discoveryResponse.toUtf8(), QHostAddress(SSDP_ADDR),
                             SSDP_PORT);
             }
@@ -179,9 +183,8 @@ void SSDP::parseMessage(const QString &message)
             {
                 //TODO tratar new device (exclude myself...)
                 qDebug() << "Novo DEVICE!";
-                qDebug() << "V: " << *v;
                 qDebug() << "------------------\n" << message;
-                emit newDeviceFound("NEW!");
+                emit newDeviceFound(username);
             }
         }
     }

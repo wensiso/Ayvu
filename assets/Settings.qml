@@ -6,8 +6,11 @@ Sheet {
     property bool flag: false
     property bool settingsChanged: false
     
+    property string username
+    
     onCreationCompleted: {
-        //Fill fields with the actual settings
+        username = _app.getUsername()
+        console.debug("Old username: "+ username)
         flag = true;
     }
     
@@ -18,6 +21,8 @@ Sheet {
                 title: "Ok"
                 onTriggered: {
                     if (settingsChanged) {
+                        console.debug("New username: "+ username)
+                        _app.setUsername(username)
                         _app.updateSettings();
                     }
                     settingsSheet.close();
@@ -41,15 +46,16 @@ Sheet {
                 Container {
                     leftPadding: 20
                     rightPadding: 20
+                    bottomPadding: 20
                     Label {
                         multiline: true
                         textStyle.fontSize: FontSize.Large
-                        text: "Choose your username: "
+                        text: "Actually, your username is \"" + username +"\".\n\nChoose your new username:"
                     }
                 }
-                Container {
-                    
+                Container {    
                     horizontalAlignment: HorizontalAlignment.Center
+                    bottomPadding: 20
                     layout: StackLayout { 
                         orientation: LayoutOrientation.LeftToRight
                     }
@@ -57,37 +63,15 @@ Sheet {
                     TextField {
                         id: userTextField
                         maxWidth: 400
-                        hintText: "username"
-                        inputMode: TextFieldInputMode.Text
+                        hintText: "New username"
+                        inputMode: TextFieldInputMode.EmailAddress
+                        onTextChanged: {
+                            settingsChanged = true
+                            username = text
+                        }
                     }   
                 }
-                Container {
-                    Divider {
-                    }
-                }
-                Container {
-                    leftPadding: 20
-                    rightPadding: 20
-                    Label {
-                        multiline: true
-                        textStyle.fontSize: FontSize.Large
-                        text: "Define the name of your device: "
-                    }
-                }
-                Container {
-                    
-                    horizontalAlignment: HorizontalAlignment.Center
-                    layout: StackLayout { 
-                        orientation: LayoutOrientation.LeftToRight
-                    }
-                    
-                    TextField {
-                        id: addressField
-                        maxWidth: 400
-                        hintText: "Name of device"
-                        inputMode: TextFieldInputMode.Text
-                    }   
-                }
+            
                 Container {
                     Divider {
                     }
@@ -99,7 +83,7 @@ Sheet {
                     property bool touchIsDown: false
                     title: "Display"
                     description: "For settings of brightness screen"
-//                    imageSource: "asset:///images/ic_brightness_screen.png"
+                    imageSource: "asset:///images/ic_brightness_screen.png"
                     onTouch: {
                         if (event.touchType == TouchType.Up && touchIsDown) {
                             _app.callSettingsCard("settings://display");
@@ -113,7 +97,7 @@ Sheet {
                     property bool touchIsDown: false
                     title: "Network Connections"
                     description: "For settings of network connection"
-//                    imageSource: "asset:///images/ic_network_connections.png"
+                    imageSource: "asset:///images/ic_network_connections.png"
                     onTouch: {
                         if (event.touchType == TouchType.Up && touchIsDown) {
                             _app.callSettingsCard("settings://networkconnections");

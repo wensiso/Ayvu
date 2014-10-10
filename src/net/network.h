@@ -11,6 +11,7 @@
 #include <QList>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QSettings>
 
 #include <QNetworkInterface>
 #include <QNetworkAddressEntry>
@@ -71,10 +72,10 @@ class Network : public QObject
 
 public:
 
-	static Network *getInstance(QObject *parent=0)
+	static Network *getInstance(QSettings *settings, QObject *parent=0)
 	{
 	    if (!instance)
-	        instance = new Network(parent);
+	        instance = new Network(settings, parent);
 	    return instance;
 	}
 
@@ -100,9 +101,11 @@ private slots:
 
 private:
     static Network *instance;
-    Network(QObject *parent = 0);
+    Network(QSettings *settings, QObject *parent = 0);
 
     bool m_connected;
+
+    QSettings *m_settings;
 
     SSDP *ssdp;
     QList<QString> *devices;

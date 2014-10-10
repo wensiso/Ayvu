@@ -148,7 +148,7 @@ void Client::finishedSession()
 
 QString Client::getUsername()
 {
-    return m_settings->value("username").toString() + "@" + m_settings->value("devicename").toString();
+    return m_settings->value("username").toString();
 }
 
 

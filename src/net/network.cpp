@@ -11,10 +11,12 @@ namespace ayvu {
 
 Network *Network::instance = 0;
 
-Network::Network(QObject* parent):QObject(parent) {
+Network::Network(QSettings *settings, QObject* parent):QObject(parent), m_settings(settings) {
 
     devices = new QList<QString>();
-    ssdp = new SSDP(30);
+
+    QString myself = m_settings->value("username").toString() + "@" + getHostname();
+    ssdp = new SSDP(30, myself);
 
     Q_ASSERT(connect(ssdp, SIGNAL(newDeviceFound(QString)), this, SLOT(addDevice(QString))));
     Q_ASSERT(connect(ssdp, SIGNAL(deviceAlive(QString)), this, SLOT(deviceAlive(QString))));
