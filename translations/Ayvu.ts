@@ -27,4 +27,35 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>ContactViewer</name>
+    <message>
+        <location filename="../assets/ContactViewer.qml" line="7"/>
+        <source>Contact Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/ContactViewer.qml" line="31"/>
+        <source>first name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/ContactViewer.qml" line="39"/>
+        <source>hostname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/ContactViewer.qml" line="48"/>
+        <source>ip</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <location filename="../assets/main.qml" line="37"/>
+        <source>%1, %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

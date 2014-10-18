@@ -1,5 +1,6 @@
 1
-19
+24
+FirstMain.qml
 images/ic_info.png
 images/ic_microphone.png
 images/icon114x114.png
@@ -13,9 +14,13 @@ images/ic_microphone_mute.png
 images/ic_share.png
 images/balloon_right.png
 images/balloon_left.png
+BackgroundImage.qml
 About.qml
+ViewerField.qml
 Balloon.qml
 Settings.qml
+ContactViewer.qml
+AddressbookScrollView.qml
 main.qml
 LabelLink.qml
 Help.qml

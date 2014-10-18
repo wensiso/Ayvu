@@ -5,7 +5,7 @@
  *      Author: wendell
  */
 
-#include <ssdp/ssdp.h>
+#include <ssdp.h>
 
 namespace ayvu
 {
@@ -13,12 +13,16 @@ namespace ayvu
 SSDP::SSDP(int interval, QString usn, QObject *parent) :
         QObject(parent) {
 
+    contacts_list = new QList<Contact>();
+    last_id = -1;
+
     this->initialized = false;
     this->interval = interval;
     this->USN = usn;
 
     this->discoverTimer = new QTimer(this);
     this->udpSocket = new QUdpSocket(this);
+
 }
 
 SSDP::~SSDP() {
@@ -184,7 +188,13 @@ void SSDP::parseMessage(const QString &message)
                 //TODO tratar new device (exclude myself...)
                 qDebug() << "Novo DEVICE!";
                 qDebug() << "------------------\n" << message;
-                emit newDeviceFound(username);
+
+                Contact c(++last_id);
+                c.setFirstName("FirstName");
+                c.setHostname("Host");
+                c.setIp("IP");
+                contacts_list->append(c);
+                emit contactChanged(last_id);
             }
         }
     }
@@ -203,4 +213,16 @@ QString* SSDP::getValue(QMapIterator<QString, QString> &iter, QString mykey)
     return 0;
 }
 
+const Contact& SSDP::contactDetails(int id)
+{
+    return contacts_list->at(id);
+}
+
+QList<Contact>* SSDP::getContacts()
+{
+    return contacts_list;
+}
+
 } /* namespace ayvu */
+
+

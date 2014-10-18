@@ -93,11 +93,7 @@ signals:
 
 public slots:
     bool testConnection();
-
-private slots:
-    void addDevice(QString);
-    void deviceAlive(QString);
-    void removeDevice(QString);
+    SSDP* getSSDP() const;
 
 private:
     static Network *instance;
@@ -108,7 +104,6 @@ private:
     QSettings *m_settings;
 
     SSDP *ssdp;
-    QList<QString> *devices;
 
 };
 

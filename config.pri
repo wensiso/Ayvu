@@ -37,10 +37,15 @@ simulator {
 config_pri_assets {
     OTHER_FILES += \
         $$quote($$BASEDIR/assets/About.qml) \
+        $$quote($$BASEDIR/assets/AddressbookScrollView.qml) \
+        $$quote($$BASEDIR/assets/BackgroundImage.qml) \
         $$quote($$BASEDIR/assets/Balloon.qml) \
+        $$quote($$BASEDIR/assets/ContactViewer.qml) \
+        $$quote($$BASEDIR/assets/FirstMain.qml) \
         $$quote($$BASEDIR/assets/Help.qml) \
         $$quote($$BASEDIR/assets/LabelLink.qml) \
         $$quote($$BASEDIR/assets/Settings.qml) \
+        $$quote($$BASEDIR/assets/ViewerField.qml) \
         $$quote($$BASEDIR/assets/images/background.png) \
         $$quote($$BASEDIR/assets/images/balloon_left.png) \
         $$quote($$BASEDIR/assets/images/balloon_right.png) \
@@ -63,7 +68,11 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/audio/audiocontrol.cpp) \
         $$quote($$BASEDIR/src/audio/audiopcm.cpp) \
         $$quote($$BASEDIR/src/audio/circularbuffer.cpp) \
+        $$quote($$BASEDIR/src/contactlist.cpp) \
+        $$quote($$BASEDIR/src/contactviewer.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
+        $$quote($$BASEDIR/src/net/contacts/contact.cpp) \
+        $$quote($$BASEDIR/src/net/contacts/ssdp.cpp) \
         $$quote($$BASEDIR/src/net/data/datareceiver.cpp) \
         $$quote($$BASEDIR/src/net/data/datasender.cpp) \
         $$quote($$BASEDIR/src/net/data/message.cpp) \
@@ -71,8 +80,7 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/net/session/client.cpp) \
         $$quote($$BASEDIR/src/net/session/connection.cpp) \
         $$quote($$BASEDIR/src/net/session/server.cpp) \
-        $$quote($$BASEDIR/src/net/session/state.cpp) \
-        $$quote($$BASEDIR/src/net/ssdp/ssdp.cpp)
+        $$quote($$BASEDIR/src/net/session/state.cpp)
 
     HEADERS += \
         $$quote($$BASEDIR/src/applicationinfo.hpp) \
@@ -80,6 +88,11 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/audio/audiocontrol.h) \
         $$quote($$BASEDIR/src/audio/audiopcm.h) \
         $$quote($$BASEDIR/src/audio/circularbuffer.h) \
+        $$quote($$BASEDIR/src/contactlist.h) \
+        $$quote($$BASEDIR/src/contactviewer.h) \
+        $$quote($$BASEDIR/src/net/contacts/contact.h) \
+        $$quote($$BASEDIR/src/net/contacts/ssdp.h) \
+        $$quote($$BASEDIR/src/net/contacts/ssdpprotocol.h) \
         $$quote($$BASEDIR/src/net/data/datareceiver.h) \
         $$quote($$BASEDIR/src/net/data/datasender.h) \
         $$quote($$BASEDIR/src/net/data/message.h) \
@@ -87,13 +100,11 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/net/session/client.h) \
         $$quote($$BASEDIR/src/net/session/connection.h) \
         $$quote($$BASEDIR/src/net/session/server.h) \
-        $$quote($$BASEDIR/src/net/session/state.h) \
-        $$quote($$BASEDIR/src/net/ssdp/ssdp.h) \
-        $$quote($$BASEDIR/src/net/ssdp/ssdpprotocol.h)
+        $$quote($$BASEDIR/src/net/session/state.h)
 }
 
 INCLUDEPATH += $$quote($$BASEDIR/src/net) \
-    $$quote($$BASEDIR/src/net/ssdp) \
+    $$quote($$BASEDIR/src/net/contacts) \
     $$quote($$BASEDIR/src/net/session) \
     $$quote($$BASEDIR/src/net/data) \
     $$quote($$BASEDIR/src) \
@@ -120,6 +131,11 @@ lupdate_inclusion {
         $$quote($$BASEDIR/../src/net/*.cc) \
         $$quote($$BASEDIR/../src/net/*.cpp) \
         $$quote($$BASEDIR/../src/net/*.cxx) \
+        $$quote($$BASEDIR/../src/net/contacts/*.c) \
+        $$quote($$BASEDIR/../src/net/contacts/*.c++) \
+        $$quote($$BASEDIR/../src/net/contacts/*.cc) \
+        $$quote($$BASEDIR/../src/net/contacts/*.cpp) \
+        $$quote($$BASEDIR/../src/net/contacts/*.cxx) \
         $$quote($$BASEDIR/../src/net/data/*.c) \
         $$quote($$BASEDIR/../src/net/data/*.c++) \
         $$quote($$BASEDIR/../src/net/data/*.cc) \
@@ -130,11 +146,6 @@ lupdate_inclusion {
         $$quote($$BASEDIR/../src/net/session/*.cc) \
         $$quote($$BASEDIR/../src/net/session/*.cpp) \
         $$quote($$BASEDIR/../src/net/session/*.cxx) \
-        $$quote($$BASEDIR/../src/net/ssdp/*.c) \
-        $$quote($$BASEDIR/../src/net/ssdp/*.c++) \
-        $$quote($$BASEDIR/../src/net/ssdp/*.cc) \
-        $$quote($$BASEDIR/../src/net/ssdp/*.cpp) \
-        $$quote($$BASEDIR/../src/net/ssdp/*.cxx) \
         $$quote($$BASEDIR/../assets/*.qml) \
         $$quote($$BASEDIR/../assets/*.js) \
         $$quote($$BASEDIR/../assets/*.qs) \

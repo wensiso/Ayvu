@@ -16,9 +16,11 @@
 #include <QStringList>
 #include <QMap>
 #include <QMapIterator>
+#include <QList>
 #include <QSettings>
 
 #include <network.h>
+#include <contact.h>
 #include "ssdpprotocol.h"
 
 namespace ayvu {
@@ -39,18 +41,20 @@ public:
             const QString &mx = QString("1"), const QString &userAgent =
                     QString("Ayvu Messenger/1.0"));
 
-    QMap<QString, QString> getMapFromMessage(QString message);
+    const Contact& contactDetails(int id);
+    QList<Contact>* getContacts();
 
-private:
+signals:
+    void contactAdded(int);
+    void contactChanged(int);
+    void contactDeleted(int);
 
-    void parseMessage(const QString &);
-    QString *getValue(QMapIterator<QString, QString> &, QString);
+    void deviceAlive(const QString &);
+    void byebyeReceived(const QString &);
+    void msearchReceived(const QString &);
+    void setupEvent(const QString &);
 
-    QTimer *discoverTimer;
-    QUdpSocket *udpSocket;
-    int interval;
-    QString USN;
-    bool initialized;
+    void multicastError();
 
 private slots:
     void datagramReceived();
@@ -60,14 +64,20 @@ public slots:
             QString("1"),
             const QString &userAgent = QString("Ayvu Messenger/1.0"));
 
-signals:
-    void newDeviceFound(const QString &);
-    void deviceAlive(const QString &);
-    void byebyeReceived(const QString &);
-    void msearchReceived(const QString &);
-    void setupEvent(const QString &);
+private:
 
-    void multicastError();
+    void parseMessage(const QString &);
+    QMap<QString, QString> getMapFromMessage(QString message);
+    QString *getValue(QMapIterator<QString, QString> &, QString);
+
+    QTimer *discoverTimer;
+    QUdpSocket *udpSocket;
+    int interval;
+    QString USN;
+    bool initialized;
+
+    QList<Contact> *contacts_list;
+    int last_id;
 
 };
 

@@ -25,6 +25,7 @@
 #include <server.h>
 #include <client.h>
 #include <state.h>
+#include <contactlist.h>
 
 #include <audiocontrol.h>
 #include <datareceiver.h>
@@ -88,6 +89,7 @@ private:
     bb::cascades::LocaleHandler* m_pLocaleHandler;
 
     ayvu::Network *m_network;
+    ayvu::ContactList *m_contactList;
     ayvu::State *m_state;
     ayvu::Client *m_sessionClient;
     ayvu::Server *m_sessionServer;

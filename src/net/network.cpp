@@ -13,14 +13,8 @@ Network *Network::instance = 0;
 
 Network::Network(QSettings *settings, QObject* parent):QObject(parent), m_settings(settings) {
 
-    devices = new QList<QString>();
-
     QString myself = m_settings->value("username").toString() + "@" + getHostname();
     ssdp = new SSDP(30, myself);
-
-    Q_ASSERT(connect(ssdp, SIGNAL(newDeviceFound(QString)), this, SLOT(addDevice(QString))));
-    Q_ASSERT(connect(ssdp, SIGNAL(deviceAlive(QString)), this, SLOT(deviceAlive(QString))));
-    Q_ASSERT(connect(ssdp, SIGNAL(byebyeReceived(QString)), this, SLOT(removeDevice(QString))));
 
     Q_ASSERT(connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(discoveryError())));
 
@@ -39,23 +33,6 @@ void Network::startDeviceDiscovery()
 void Network::stopDeviceDiscovery()
 {
     ssdp->stop();
-}
-
-
-void Network::addDevice(QString device)
-{
-    devices->append(device);
-}
-
-void Network::deviceAlive(QString device)
-{
-    //TODO Tratar alive
-    devices->append(device);
-}
-
-void Network::removeDevice(QString device)
-{
-    devices->removeOne(device);
 }
 
 MessageType getMessageType(const QString &message) {
@@ -106,5 +83,11 @@ QString Network::getHostname()
     return HOSTNAME;
 }
 
+SSDP* Network::getSSDP() const
+{
+    return ssdp;
+}
+
 } /* namespace ayvu */
+
 

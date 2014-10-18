@@ -95,6 +95,10 @@ void ApplicationUI::registerQmlTypes(QmlDocument *qml)
     m_network = Network::getInstance(m_settings, this);
     qml->setContextProperty("_network", m_network);
 
+    qmlRegisterType<ContactList>();
+    m_contactList = new ContactList(m_network->getSSDP(), this);
+    qml->setContextProperty("_addressBook", m_contactList);
+
     qmlRegisterType<State>();
     m_state = State::getInstance();
     qml->setContextProperty("_state", m_state);
