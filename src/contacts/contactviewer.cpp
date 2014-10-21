@@ -3,15 +3,15 @@
 namespace ayvu {
 
 //! [0]
-ContactViewer::ContactViewer(SSDP *service, QObject *parent)
+ContactViewer::ContactViewer(ContactService *service, QObject *parent)
     : QObject(parent)
-    , ssdp(service)
+    , m_contactService(service)
     , m_contactId(-1)
 {
     qDebug() << "ContactViewer: created! ";
 
     // Ensure to invoke the contactsChanged() method whenever a contact has been changed
-    bool ok = connect(ssdp, SIGNAL(contactChanged(int)), this, SLOT(contactChanged(int)));
+    bool ok = connect(m_contactService, SIGNAL(contactChanged(int)), SLOT(contactChanged(int)));
     Q_ASSERT(ok);
     Q_UNUSED(ok);
 }
@@ -26,7 +26,7 @@ void ContactViewer::updateContact()
     const QString oldIp = m_ip;
 
     // Fetch new values from persistent storage
-    const Contact contact = ssdp->contactDetails(m_contactId);
+    const Contact contact = m_contactService->contactDetails(m_contactId);
 
     m_firstName = contact.getFirstName();
     m_hostname = contact.getHostname();
@@ -45,15 +45,13 @@ void ContactViewer::updateContact()
 //! [1]
 
 //! [2]
-void ContactViewer::contactChanged(int id)
+void ContactViewer::contactChanged(const int &contactId)
 {
     /**
      * Call updateContact() only if the contact we are currently displaying
      * has been changed.
      */
-    qDebug() << "ContactViewer: ID changed: " << id;
-
-    if (id == m_contactId)
+    if (contactId == m_contactId)
         updateContact();
 }
 //! [2]

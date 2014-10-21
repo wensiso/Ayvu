@@ -21,6 +21,7 @@
 #include <ssdp.h>
 
 //TODO Pegar hostname do usuario
+#define DEFAULT_USER "User"
 #define HOSTNAME "BlackberryZ10"
 
 #define REQUEST_PORT 8000
@@ -72,10 +73,10 @@ class Network : public QObject
 
 public:
 
-	static Network *getInstance(QSettings *settings, QObject *parent=0)
+	static Network *getInstance(QObject *parent=0)
 	{
 	    if (!instance)
-	        instance = new Network(settings, parent);
+	        instance = new Network(parent);
 	    return instance;
 	}
 
@@ -83,13 +84,13 @@ public:
 	Q_INVOKABLE static QString getValidIPStr();
 	Q_INVOKABLE static QString getHostname();
 
+    void defineSettings(QSettings *settings);
 	void startDeviceDiscovery();
 	void stopDeviceDiscovery();
 
 signals:
     void onConnected();
     void discoveryError();
-    void devicesUpdated(QList<QString>*);
 
 public slots:
     bool testConnection();
@@ -97,8 +98,9 @@ public slots:
 
 private:
     static Network *instance;
-    Network(QSettings *settings, QObject *parent = 0);
+    Network(QObject *parent = 0);
 
+    bool m_discovery_started;
     bool m_connected;
 
     QSettings *m_settings;

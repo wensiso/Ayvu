@@ -13,9 +13,6 @@ namespace ayvu
 SSDP::SSDP(int interval, QString usn, QObject *parent) :
         QObject(parent) {
 
-    contacts_list = new QList<Contact>();
-    last_id = -1;
-
     this->initialized = false;
     this->interval = interval;
     this->USN = usn;
@@ -189,12 +186,7 @@ void SSDP::parseMessage(const QString &message)
                 qDebug() << "Novo DEVICE!";
                 qDebug() << "------------------\n" << message;
 
-                Contact c(++last_id);
-                c.setFirstName("FirstName");
-                c.setHostname("Host");
-                c.setIp("IP");
-                contacts_list->append(c);
-                emit contactChanged(last_id);
+                emit deviceFound(message);
             }
         }
     }
@@ -211,16 +203,6 @@ QString* SSDP::getValue(QMapIterator<QString, QString> &iter, QString mykey)
             return new QString(iter.value());
     }
     return 0;
-}
-
-const Contact& SSDP::contactDetails(int id)
-{
-    return contacts_list->at(id);
-}
-
-QList<Contact>* SSDP::getContacts()
-{
-    return contacts_list;
 }
 
 } /* namespace ayvu */

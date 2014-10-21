@@ -16,11 +16,10 @@
 #include <QStringList>
 #include <QMap>
 #include <QMapIterator>
-#include <QList>
 #include <QSettings>
 
 #include <network.h>
-#include <contact.h>
+
 #include "ssdpprotocol.h"
 
 namespace ayvu {
@@ -41,14 +40,8 @@ public:
             const QString &mx = QString("1"), const QString &userAgent =
                     QString("Ayvu Messenger/1.0"));
 
-    const Contact& contactDetails(int id);
-    QList<Contact>* getContacts();
-
 signals:
-    void contactAdded(int);
-    void contactChanged(int);
-    void contactDeleted(int);
-
+    void deviceFound(const QString &);
     void deviceAlive(const QString &);
     void byebyeReceived(const QString &);
     void msearchReceived(const QString &);
@@ -64,10 +57,12 @@ public slots:
             QString("1"),
             const QString &userAgent = QString("Ayvu Messenger/1.0"));
 
+    QMap<QString, QString> getMapFromMessage(QString message);
+
+
 private:
 
     void parseMessage(const QString &);
-    QMap<QString, QString> getMapFromMessage(QString message);
     QString *getValue(QMapIterator<QString, QString> &, QString);
 
     QTimer *discoverTimer;
@@ -75,9 +70,6 @@ private:
     int interval;
     QString USN;
     bool initialized;
-
-    QList<Contact> *contacts_list;
-    int last_id;
 
 };
 

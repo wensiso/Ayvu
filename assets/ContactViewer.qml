@@ -21,10 +21,6 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Top
 
-                leftPadding: ui.du(15)
-                topPadding: ui.du(50)
-                rightPadding: ui.du(15)
-
                 //! [0]
                 ViewerField {
                     horizontalAlignment: HorizontalAlignment.Fill
@@ -52,23 +48,16 @@ Page {
         }
     }
     
-//    //! [1]
-//    actions: [
-//        ActionItem {
-//            title: qsTr ("Edit")
-//            imageSource: "asset:///images/action_editcontact.png"
-//            
+    //! [1]
+    actions: [
+        ActionItem {
+            title: qsTr ("Call")
+            imageSource: "asset:///images/action_editcontact.png"
+            
 //            onTriggered: {
 //                _addressBook.editContact()
 //                navigationPane.push(contactEditor.createObject())
 //            }
-//        },
-//        DeleteActionItem {
-//            onTriggered: {
-//                _addressBook.deleteContact()
-//                
-//                navigationPane.pop()
-//            }
-//        }
-//    ]
+        }
+    ]
 }

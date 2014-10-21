@@ -3,8 +3,8 @@
 
 #include <QObject>
 
-#include <ssdp.h>
 #include "contact.h"
+#include "contactservice.h"
 
 namespace ayvu {
 
@@ -28,7 +28,7 @@ class ContactViewer : public QObject
     Q_PROPERTY(QString ip READ ip NOTIFY ipChanged)
 
 public:
-    ContactViewer(SSDP *service, QObject *parent = 0);
+    ContactViewer(ContactService *service, QObject *parent = 0);
 
     // Sets the ID of the contact that should be displayed.
     void setContactId(int contactId);
@@ -43,7 +43,7 @@ private Q_SLOTS:
     /**
      * This slot is invoked whenever the contact service reports that a contact has been changed.
      */
-    void contactChanged(int id);
+    void contactChanged(const int &contactId);
 
 private:
     // The accessor methods of the properties
@@ -54,7 +54,8 @@ private:
     // Loads the contact from the persistent storage and updates the properties
     void updateContact();
 
-    SSDP *ssdp;
+    // The central object to access the contact service
+    ContactService* m_contactService;
 
     // The ID of the contact that is displayed
     int m_contactId;

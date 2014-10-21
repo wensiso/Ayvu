@@ -35,7 +35,10 @@ using namespace ayvu;
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         QObject(app)
 {
+    qDebug() << "Registering ApplicationInfo...";
     ApplicationInfo::registerQmlTypes();
+
+    qDebug() << "Initing settings...";
     this->initSettings();
 
     // prepare the localization
@@ -46,17 +49,24 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     Q_UNUSED(res);
     onSystemLanguageChanged();
 
+    qDebug() << "Creating QML...";
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
     qml->setContextProperty("_app", this);
     // Create a SceneCover and set the application cover
 //    ActiveFrameQML *activeFrame = new ActiveFrameQML();
 //    Application::instance()->setCover(activeFrame);
-    this->registerQmlTypes(qml);
 
+    qDebug() << "Starting Network services...";
+    m_network = Network::getInstance(this);
+    m_network->defineSettings(m_settings);
     m_network->startDeviceDiscovery();
+
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), m_network, SLOT(testConnection()));
     m_timer->start(5000);
+
+    qDebug() << "Registering QML Types...";
+    this->registerQmlTypes(qml);
 
     m_sessionServer->start();
 
@@ -92,11 +102,10 @@ void ApplicationUI::initSettings()
 void ApplicationUI::registerQmlTypes(QmlDocument *qml)
 {
     qmlRegisterType<Network>();
-    m_network = Network::getInstance(m_settings, this);
     qml->setContextProperty("_network", m_network);
 
     qmlRegisterType<ContactList>();
-    m_contactList = new ContactList(m_network->getSSDP(), this);
+    m_contactList = new ContactList(this);
     qml->setContextProperty("_addressBook", m_contactList);
 
     qmlRegisterType<State>();

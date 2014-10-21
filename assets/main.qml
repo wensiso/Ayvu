@@ -19,12 +19,7 @@ NavigationPane {
             Container {
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
-
-//                leftPadding: ui.du(3.3)
-//                topPadding: ui.du(3.3)
-//                rightPadding: ui.du(3.3)
-//                bottomPadding: ui.du(3.3)
-
+                
                 //! [1]
                 // The list view with all contacts
                 ListView {
@@ -34,7 +29,7 @@ NavigationPane {
                         type: "item"
 
                         StandardListItem {
-                            title: qsTr ("%1, %2").arg(ListItemData.hostname).arg(ListItemData.firstName)
+                            title: qsTr ("%1@%2").arg(ListItemData.firstName).arg(ListItemData.hostname)
                             description: ListItemData.ip
                         }
                     }

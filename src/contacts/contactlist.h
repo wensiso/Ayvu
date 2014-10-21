@@ -5,8 +5,8 @@
 
 #include <bb/cascades/GroupDataModel>
 
-#include <ssdp.h>
 #include "contact.h"
+#include "contactservice.h"
 
 namespace ayvu {
 
@@ -28,7 +28,7 @@ class ContactList : public QObject
 
 
 public:
-    ContactList(SSDP *ssdp, QObject *parent = 0);
+    ContactList(QObject *parent = 0);
 
 public Q_SLOTS:
     /**
@@ -50,7 +50,7 @@ private:
     bb::cascades::GroupDataModel* model() const;
     ContactViewer* contactViewer() const;
 
-    SSDP *discoveryService;
+    ContactService *m_contactService;
 
     // The property values
     bb::cascades::GroupDataModel* m_model;

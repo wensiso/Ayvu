@@ -11,28 +11,46 @@ namespace ayvu {
 
 Network *Network::instance = 0;
 
-Network::Network(QSettings *settings, QObject* parent):QObject(parent), m_settings(settings) {
-
-    QString myself = m_settings->value("username").toString() + "@" + getHostname();
-    ssdp = new SSDP(30, myself);
-
-    Q_ASSERT(connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(discoveryError())));
-
+Network::Network(QObject* parent):QObject(parent)
+{
+    m_discovery_started = false;
     testConnection();
+}
+
+void Network::defineSettings(QSettings* settings)
+{
+    m_settings = settings;
 }
 
 void Network::startDeviceDiscovery()
 {
-    if(testConnection())
-    {
-        ssdp->init();
-        ssdp->start();
-    }
+    if(m_discovery_started)
+        return;
+
+    Q_ASSERT_X(m_settings, "Network::startDeviceDiscovery(QSettings*)", "m_settings parameter is null");
+
+    QString myself = DEFAULT_USER;
+
+    myself = m_settings->value("username").toString() + "@" + getHostname();
+    ssdp = new SSDP(30, myself);
+
+    bool ok = connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(discoveryError()));
+    Q_ASSERT(ok);
+    Q_UNUSED(ok);
+
+    ssdp->init();
+    ssdp->start();
+    m_discovery_started = true;
+
+
 }
 
 void Network::stopDeviceDiscovery()
 {
     ssdp->stop();
+    disconnect(ssdp, SIGNAL(multicastError()), this, SIGNAL(discoveryError()));
+    delete ssdp;
+    m_discovery_started = false;
 }
 
 MessageType getMessageType(const QString &message) {
@@ -89,5 +107,3 @@ SSDP* Network::getSSDP() const
 }
 
 } /* namespace ayvu */
-
-
