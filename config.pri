@@ -56,8 +56,10 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/ic_network_connections.png) \
         $$quote($$BASEDIR/assets/images/ic_no_connections.png) \
         $$quote($$BASEDIR/assets/images/ic_open.png) \
+        $$quote($$BASEDIR/assets/images/ic_phone.png) \
         $$quote($$BASEDIR/assets/images/ic_review.png) \
         $$quote($$BASEDIR/assets/images/ic_share.png) \
+        $$quote($$BASEDIR/assets/images/ic_stop.png) \
         $$quote($$BASEDIR/assets/images/icon114x114.png) \
         $$quote($$BASEDIR/assets/main.qml)
 }
@@ -68,10 +70,10 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/audio/audiocontrol.cpp) \
         $$quote($$BASEDIR/src/audio/audiopcm.cpp) \
         $$quote($$BASEDIR/src/audio/circularbuffer.cpp) \
+        $$quote($$BASEDIR/src/contactlist.cpp) \
         $$quote($$BASEDIR/src/contacts/contact.cpp) \
-        $$quote($$BASEDIR/src/contacts/contactlist.cpp) \
         $$quote($$BASEDIR/src/contacts/contactservice.cpp) \
-        $$quote($$BASEDIR/src/contacts/contactviewer.cpp) \
+        $$quote($$BASEDIR/src/contactviewer.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
         $$quote($$BASEDIR/src/net/data/datareceiver.cpp) \
         $$quote($$BASEDIR/src/net/data/datasender.cpp) \
@@ -89,10 +91,10 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/audio/audiocontrol.h) \
         $$quote($$BASEDIR/src/audio/audiopcm.h) \
         $$quote($$BASEDIR/src/audio/circularbuffer.h) \
+        $$quote($$BASEDIR/src/contactlist.h) \
         $$quote($$BASEDIR/src/contacts/contact.h) \
-        $$quote($$BASEDIR/src/contacts/contactlist.h) \
         $$quote($$BASEDIR/src/contacts/contactservice.h) \
-        $$quote($$BASEDIR/src/contacts/contactviewer.h) \
+        $$quote($$BASEDIR/src/contactviewer.h) \
         $$quote($$BASEDIR/src/net/data/datareceiver.h) \
         $$quote($$BASEDIR/src/net/data/datasender.h) \
         $$quote($$BASEDIR/src/net/data/message.h) \

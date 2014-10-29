@@ -24,6 +24,7 @@
 #include <Qt/qdeclarativedebug.h>
 #include <iostream>
 
+#include <contactviewer.h>
 #include <audiocontrol.h>
 
 using namespace bb::cascades;
@@ -58,6 +59,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 	qmlRegisterType<bb::device::Led>("bb.device", 1, 0, "Led");
 	qmlRegisterUncreatableType<bb::device::LedColor>("bb.device", 1, 0, "LedColor", "");
 
+	qmlRegisterType<ayvu::ContactViewer>();
 	qmlRegisterType<ayvu::AudioControl>("ayvu.audio", 1, 0, "AudioControl");
 
     Application app(argc, argv);

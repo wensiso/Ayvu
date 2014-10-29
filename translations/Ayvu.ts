@@ -35,30 +35,25 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/ContactViewer.qml" line="27"/>
+        <location filename="../assets/ContactViewer.qml" line="56"/>
         <source>first name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/ContactViewer.qml" line="35"/>
+        <location filename="../assets/ContactViewer.qml" line="65"/>
         <source>hostname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/ContactViewer.qml" line="44"/>
+        <location filename="../assets/ContactViewer.qml" line="75"/>
         <source>ip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../assets/ContactViewer.qml" line="54"/>
-        <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="32"/>
+        <location filename="../assets/main.qml" line="109"/>
         <source>%1@%2</source>
         <translation type="unfinished"></translation>
     </message>

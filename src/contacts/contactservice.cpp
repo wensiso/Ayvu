@@ -46,13 +46,22 @@ void ContactService::onNewDevice(QString message)
     QString host = contactMap["usn"].split("@").at(1);
     QString ip = contactMap["location"];
 
+    //If i found myself...
+    if(ip.compare(Network::getValidIPStr())==0)
+        return;
+
     Contact c(++last_id);
     c.setFirstName(user);
     c.setHostname(host);
     c.setIp(ip);
-    m_contactList.append(c);
 
-    emit contactAdded(last_id);
+    if(!m_contactList.contains(c)) {
+        m_contactList.append(c);
+        emit contactAdded(last_id);
+    } else {
+        --last_id;
+    }
+
 }
 
 } /* namespace ayvu */

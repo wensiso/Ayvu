@@ -25,6 +25,12 @@ public:
     const QString& getHostname() const;
     void setHostname(const QString& hostname);
 
+    //return true if the messages are equal, false otherwise
+    inline bool operator == (const Contact &c) const {
+        return (c.m_firstName == m_firstName) && (c.m_hostname == m_hostname) && (c.m_ip == m_ip);
+    }
+
+
 private:
     int m_id;
     QString m_firstName;

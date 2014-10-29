@@ -24,7 +24,7 @@ class ContactList : public QObject
     Q_PROPERTY(bb::cascades::GroupDataModel *model READ model CONSTANT);
 
     // The viewer object for the current contact
-    Q_PROPERTY(ContactViewer* contactViewer READ contactViewer CONSTANT);
+    Q_PROPERTY(ayvu::ContactViewer* contactViewer READ contactViewer CONSTANT);
 
 
 public:

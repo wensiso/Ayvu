@@ -1,5 +1,5 @@
 1
-24
+26
 FirstMain.qml
 images/ic_info.png
 images/ic_microphone.png
@@ -8,7 +8,9 @@ images/ic_network_connections.png
 images/ic_brightness_screen.png
 images/ic_review.png
 images/ic_no_connections.png
+images/ic_stop.png
 images/background.png
+images/ic_phone.png
 images/ic_open.png
 images/ic_microphone_mute.png
 images/ic_share.png
