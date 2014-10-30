@@ -11,6 +11,7 @@
 #include <QList>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QHostInfo>
 #include <QSettings>
 
 #include <QNetworkInterface>
@@ -20,9 +21,7 @@
 
 #include <ssdp.h>
 
-//TODO Pegar hostname do usuario
 #define DEFAULT_USER "User"
-#define HOSTNAME "BlackberryZ10"
 
 #define REQUEST_PORT 8000
 #define REQUEST_PORT_STR "8000"
@@ -82,7 +81,7 @@ public:
 
     static QHostAddress getValidIP();
 	Q_INVOKABLE static QString getValidIPStr();
-	Q_INVOKABLE static QString getHostname();
+	Q_INVOKABLE static QString getLocalHostname();
 
     void defineSettings(QSettings *settings);
 	void startDeviceDiscovery();

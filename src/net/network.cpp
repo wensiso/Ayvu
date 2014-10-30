@@ -31,7 +31,7 @@ void Network::startDeviceDiscovery()
 
     QString myself = DEFAULT_USER;
 
-    myself = m_settings->value("username").toString() + "@" + getHostname();
+    myself = m_settings->value("username").toString() + "@" + getLocalHostname();
     ssdp = new SSDP(30, myself);
 
     bool ok = connect(ssdp, SIGNAL(multicastError()), this, SIGNAL(discoveryError()));
@@ -96,9 +96,9 @@ QString Network::getValidIPStr()
 	return  getValidIP().toString();
 }
 
-QString Network::getHostname()
+QString Network::getLocalHostname()
 {
-    return HOSTNAME;
+    return QHostInfo::localHostName();
 }
 
 SSDP* Network::getSSDP() const

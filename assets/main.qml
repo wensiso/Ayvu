@@ -100,6 +100,8 @@ NavigationPane {
                 //! [1]
                 // The list view with all contacts
                 ListView {
+                    id: listView
+                    
                     dataModel: _addressBook.model
 
                     listItemComponents: ListItemComponent {
@@ -191,6 +193,11 @@ NavigationPane {
                     _sessionClient.setServerAddress(callerAddress)
                     _audioSender.setAddress(callerAddress)
                     _audioControl.toggleAudioOn()
+                    
+                    _addressBook.setCurrentContact(callerName, callerAddress)
+                    _addressBook.viewContact();
+                    navigationPane.push(contactViewer.createObject(navigationPane))
+                    
                 } else {
                     console.debug("[WENDELL]: Rejecting call from " + callerName)
                     _sessionServer.rejectCall()

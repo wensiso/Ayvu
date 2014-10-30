@@ -6,11 +6,14 @@
  */
 
 #include <QStringList>
+#include <qglobal.h>
 
 #include <client.h>
 
 namespace ayvu
 {
+
+extern int call_id;
 
 const QString Client::genericRequest = "%1 %2 %3\r\n"
         PROTO_USER ": %5@%6\r\n"
@@ -19,15 +22,16 @@ const QString Client::genericRequest = "%1 %2 %3\r\n"
         "\r\n";
 
 Client::Client(QSettings *settings, QObject* parent) :
-        QObject(parent)
+        QObject(parent),
+        m_settings (settings),
+        state(State::getInstance())
 {
+    qsrand(qrand());
+
     m_socket = new QTcpSocket(this);
     server_address = QHostAddress::LocalHost;
 
-    m_settings = settings;
-    state = State::getInstance();
-
-    m_hostname = Network::getHostname();
+    m_hostname = Network::getLocalHostname();
     my_address = Network::getValidIPStr();
 
     this->initHandlers();
@@ -47,7 +51,6 @@ void Client::setServerAddress(QHostAddress address)
         m_socket->disconnectFromHost();
     server_address = address;
     m_socket->connectToHost(server_address, REQUEST_PORT);
-    qDebug() << "Socket State: " << m_socket->state();
 }
 
 void Client::setServerAddress(QString address)
@@ -81,8 +84,10 @@ void Client::send(const QString& message)
 
 void Client::sendInviteMessage()
 {
+    call_id = qrand() % ((HIGHT_RAND + 1) - LOW_RAND); //create a call_id
+
     QString msg = genericRequest.arg(PROTO_INVITE, PROTO_AUDIO_TYPE, PROTO_VERSION, getUsername(),
-            m_hostname, Network::getValidIPStr(), "12345");
+            m_hostname, Network::getValidIPStr(), QString::number(call_id));
     send(msg);
 }
 
@@ -90,14 +95,14 @@ void Client::sendCallingMessage()
 {
     qDebug() << "[Client] Sending calling...";
     QString msg = genericRequest.arg(PROTO_CALLING, PROTO_AUDIO_TYPE, PROTO_VERSION, getUsername(),
-            m_hostname, my_address, "12345");
+            m_hostname, my_address, QString::number(call_id));
     send(msg);
 }
 
 void Client::sendFinishMessage()
 {
     QString msg = genericRequest.arg(PROTO_FINISH, PROTO_AUDIO_TYPE, PROTO_VERSION, getUsername(),
-            m_hostname, my_address, "12345");
+            m_hostname, my_address, QString::number(call_id));
     send(msg);
 }
 

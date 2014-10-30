@@ -12,15 +12,11 @@
 #include <QDebug>
 #include <QUdpSocket>
 #include <QHostAddress>
-#include <QDir>
 
 #include <audiopcm.h>
 #include <message.h>
 #include <datasender.h>
 #include <network.h>
-
-#define LOG_DIR "shared/documents/wt/"
-#define LOG_FILE "log-"
 
 namespace ayvu {
 
@@ -40,9 +36,6 @@ public:
 	void start();
 	void stop();
 
-public slots:
-	void setLoggingPercent(double);
-
 private slots:
 	void messageReceived();
 
@@ -50,18 +43,8 @@ private:
 	static DataReceiver *instance;  //Singleton
 	DataReceiver(QObject *parent=0);
 
-	void createLogFile();
-	void printLatency(qint64, qint64);
-	void writeLatency(qint64, qint64);
-
 	QUdpSocket *m_udpListener;
 	QByteArray *m_datagram;
-
-	QDir *m_logdir;
-	QFile *m_logfile;
-
-	bool m_logfileCreated;
-	double m_loggingPercent; //Default is 0 (log off)
 
 };
 }

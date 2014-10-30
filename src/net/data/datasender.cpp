@@ -36,9 +36,9 @@ const QHostAddress& DataSender::getAddress() const {
 int DataSender::writeMessage(QByteArray &datagram) {
 	int ret;
 
-	++seq; //Overflow will be a problem in 2032...
+	++seq; //Overflow will not be a problem in 2032...
 
-	Message packet(Message::NORMAL, seq, datagram);
+	Message packet(datagram, seq);
 	QByteArray message = packet.createDatagram();
 
 	ret = m_udpSender->writeDatagram(message.data(), message.size(),
@@ -47,24 +47,6 @@ int DataSender::writeMessage(QByteArray &datagram) {
 	if (ret < 0) {
 		--seq;
 		qWarning() << "Error: message wasn't sent!";
-	}
-	return ret;
-}
-
-/**
- * Send a pure datagram (to reports...)
- */
-int DataSender::writeDatagram(QByteArray &datagram) {
-	int ret;
-
-    qDebug() << "[DataSender] Sending report to " << m_udpSender->localAddress().toString();
-
-
-	ret = m_udpSender->writeDatagram(datagram.data(), datagram.size(),
-			this->m_address, DATA_PORT);
-
-	if (ret < 0) {
-		qWarning() << "[DataSender] Error: datagram wasn't sent!";
 	}
 	return ret;
 }

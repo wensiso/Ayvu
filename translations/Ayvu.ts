@@ -53,7 +53,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="109"/>
+        <location filename="../assets/main.qml" line="111"/>
         <source>%1@%2</source>
         <translation type="unfinished"></translation>
     </message>

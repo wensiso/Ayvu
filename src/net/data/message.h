@@ -9,8 +9,8 @@
 #define MESSAGE_HPP_
 
 /**
- * Message: [TYPE (1 byte)][TIME_STAMP (8 bytes)][SEQ_NUMBER (8 bytes)][DATA (640 bytes)]
- *          [                   HEADER (17 bytes)                     ][DATA (640 bytes)]
+ * Message: [[TIME_STAMP (8 bytes)][SEQ_NUMBER (8 bytes)][DATA (640 bytes)]
+ *          [           HEADER (16 bytes)               ][DATA (640 bytes)]
  */
 
 #include <QObject>
@@ -23,26 +23,19 @@ namespace ayvu {
 class Message {
 public:
 
-	static const char NORMAL = 'N'; //Normal message
-	static const char CONTROL = 'C'; //QoS Control Message
-
 	struct Header {
-		char type;  //1 byte
 		qint64 timestamp; //8 bytes
 		qint64 sequence;  //8 bytes
 	};
 
 	Message();
-	Message(char type, qint64 seq, QByteArray& data);
+	Message(QByteArray& data, qint64 seq=0);
 
 	//Create a Message object from a received datagram
 	void createFromReceivedDatagram(QByteArray *datagram);
 
 	//Create a datagram from a Message
 	QByteArray createDatagram();
-
-	//Return the message latency. For tests only
-	qint64 getLatency();
 
 	//Getters and Setters
 	QByteArray* getData() const;
@@ -51,8 +44,6 @@ public:
 	qint64 getSequence() const;
 	void setSequence(const qint64& sequence);
 	qint64 getTimeStamp() const;
-	char getType() const;
-	void setType(char type);
 
 private:
 	struct Header m_header;

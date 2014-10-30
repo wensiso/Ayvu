@@ -28,7 +28,6 @@ public:
 
 	const QHostAddress& getAddress() const;
 	int writeMessage(QByteArray &datagram);
-	int writeDatagram(QByteArray &datagram);
 
 private:
 	static DataSender *instance;  //Singleton

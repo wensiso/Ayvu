@@ -12,6 +12,8 @@
 
 namespace ayvu {
 
+extern int call_id;
+
 Connection::Connection(QObject *parent)
 : QTcpSocket(parent)
 {
@@ -81,6 +83,10 @@ int Connection::parseInviteRequest(QHash<QString, QString>& request)
 
     qDebug() << "[SERVER]: Connected with " << username << " from " << host;
 
+    QString callid = request.find(PROTO_CALL_ID).value();
+    call_id = callid.toInt();
+    qDebug() << "[SERVER]: CALL-ID: " << call_id;
+
     server->setClientName(username);
     server->setClientAddress(host);
     state->setIncomming();
@@ -90,7 +96,7 @@ int Connection::parseInviteRequest(QHash<QString, QString>& request)
 int Connection::parseCallingRequest(QHash<QString, QString>& request)
 {
     //TODO Parse calling message
-    //TODO start void here
+    //TODO start voice here
     qDebug() << "[SERVER] Parsing calling message..." << request;
     return 0;
 }
@@ -126,7 +132,7 @@ bool Connection::sendAcceptMessage()
     QString media_host = Network::getValidIPStr() + ":" + QString::number(DATA_PORT);
 
     QString msg = Server::genericResponse.arg(PROTO_ACCEPT, PROTO_AUDIO_TYPE, PROTO_VERSION, server->getUsername(),
-            Network::getHostname(), media_host, "12345");
+            Network::getLocalHostname(), media_host, QString::number(call_id));
     return sendMessage(msg);
 }
 
@@ -134,7 +140,7 @@ bool Connection::sendRejectMessage(const QString &cause)
 {
     qDebug() << "[SERVER]: Rejecting connection: " << cause;
     QString msg = Server::genericResponse.arg(PROTO_REJECT, PROTO_AUDIO_TYPE, PROTO_VERSION, server->getUsername(),
-            Network::getHostname(), Network::getValidIPStr(), "12345", cause);
+            Network::getLocalHostname(), Network::getValidIPStr(), QString::number(call_id), cause);
     return sendMessage(msg);
 }
 

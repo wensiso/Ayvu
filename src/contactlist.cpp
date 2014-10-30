@@ -45,6 +45,13 @@ void ContactList::setCurrentContact(const QVariantList &indexPath)
 }
 //! [1]
 
+void ContactList::setCurrentContact(const QString name, const QString ip)
+{
+    QString fname = name.split("@").at(0);
+    QString host = name.split("@").at(1);
+    m_currentContactId = m_contactService->getContactList().indexOf(Contact(-1, fname, host, ip));
+}
+
 //! [4]
 void ContactList::viewContact()
 {

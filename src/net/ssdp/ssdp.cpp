@@ -141,18 +141,16 @@ void SSDP::parseMessage(const QString &message)
     QMapIterator<QString, QString> iter(request);
     QString *v;
 
-    QString username = "newuser"; //TODO Pegar meu user...
+    QString username = "user"; //TODO Pegar meu user...
 
     if (message.startsWith(SSDP_SEARCH_METHOD, Qt::CaseInsensitive))
     {
         if((v = getValue(iter, "MAN")))
         {
-            qDebug() << "Receiving discovery message: \n" << message;
             if(v->compare(SSDP_DISCOVER, Qt::CaseInsensitive)==0)
             {
                 //TODO Gerar DATE
-                qDebug() << "Discovering received. Creating response...";
-                QString discoveryResponse = SSDP_DISCOVERY_AYVU_RESPONSE.arg(Network::getValidIPStr(), this->USN, "ayvu:voice", "01/01/2001");
+                QString discoveryResponse = SSDP_DISCOVERY_AYVU_RESPONSE.arg(Network::getValidIPStr(), this->USN, "ayvu:voice");
                 udpSocket->writeDatagram(discoveryResponse.toUtf8(), QHostAddress(SSDP_ADDR),
                             SSDP_PORT);
             }

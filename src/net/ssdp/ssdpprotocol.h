@@ -69,7 +69,6 @@ static const QString SSDP_DISCOVERY_AYVU_RESPONSE =
         "Location: %1\r\n"
         "USN: %2\r\n"
         "ST: %3\r\n"
-        "Date: %4\r\n"
         "Content-Length: 0\r\n\r\n";
 
 

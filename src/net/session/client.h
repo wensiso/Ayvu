@@ -16,6 +16,9 @@
 #include <network.h>
 #include <state.h>
 
+#define LOW_RAND 1000
+#define HIGHT_RAND 9999
+
 namespace ayvu {
 
 class Client : public QObject {

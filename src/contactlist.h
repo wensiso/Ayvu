@@ -36,6 +36,8 @@ public Q_SLOTS:
      */
     void setCurrentContact(const QVariantList &indexPath);
 
+    void setCurrentContact(const QString name, const QString ip);
+
     /**
      * Prepares the contact viewer to display the current contact.
      */
