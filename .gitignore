@@ -53,7 +53,12 @@ local.properties
 *.launch
  
 # CDT-specific
-.cproject
+#.cproject
  
 # PDT-specific
 .buildpath
+
+# Momentics IDE
+arm/**
+arm/**/*
+/arm

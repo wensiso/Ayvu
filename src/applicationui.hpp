@@ -18,6 +18,22 @@
 #define ApplicationUI_HPP_
 
 #include <QObject>
+#include <QSettings>
+#include <QTimer>
+
+#include <network.h>
+#include <server.h>
+#include <client.h>
+#include <state.h>
+#include <contactlist.h>
+
+#include <audiocontrol.h>
+#include <datareceiver.h>
+#include <datasender.h>
+
+#include "applicationinfo.hpp"
+
+#define DEFAULT_USERNAME "user"
 
 namespace bb
 {
@@ -25,6 +41,11 @@ namespace bb
     {
         class Application;
         class LocaleHandler;
+    }
+    namespace system
+    {
+        class SystemDialog;
+        class SystemUiResult;
     }
 }
 
@@ -41,12 +62,39 @@ class ApplicationUI : public QObject
     Q_OBJECT
 public:
     ApplicationUI(bb::cascades::Application *app);
-    virtual ~ApplicationUI() { }
+    virtual ~ApplicationUI();
+
+    Q_INVOKABLE void callAppWorldVendorCard();
+    Q_INVOKABLE void postAReview();
+    Q_INVOKABLE void callSettingsCard(QString uri);
+    Q_INVOKABLE void updateSettings();
+
+    Q_INVOKABLE const QString getUsername() const;
+    Q_INVOKABLE void setUsername(const QString& username);
+
 private slots:
     void onSystemLanguageChanged();
+
 private:
+
+    void registerQmlTypes(bb::cascades::QmlDocument*);
+    void initSettings();
+
+    QTimer *m_timer;
     QTranslator* m_pTranslator;
+
+    QSettings *m_settings;
+    QString m_username;
+
     bb::cascades::LocaleHandler* m_pLocaleHandler;
+
+    ayvu::Network *m_network;
+    ayvu::ContactList *m_contactList;
+    ayvu::State *m_state;
+    ayvu::Client *m_sessionClient;
+    ayvu::Server *m_sessionServer;
+    ayvu:: DataSender *m_audioSender;
+    ayvu::DataReceiver *m_audioReceiver;
 };
 
 #endif /* ApplicationUI_HPP_ */

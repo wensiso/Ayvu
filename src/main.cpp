@@ -15,22 +15,59 @@
  */
 
 #include <bb/cascades/Application>
+#include <bb/device/Led>
 
 #include <QLocale>
 #include <QTranslator>
 #include "applicationui.hpp"
 
 #include <Qt/qdeclarativedebug.h>
+#include <iostream>
+
+#include <contactviewer.h>
+#include <audiocontrol.h>
 
 using namespace bb::cascades;
 
+namespace ayvu {
+    int call_id = 0;
+}
+
+static void customMessageHandler(QtMsgType type, const char *message)
+{
+	switch (type) {
+		case QtDebugMsg:
+			std::cout << "Debug: " << message << std::endl;
+			break;
+		case QtWarningMsg:
+			std::cout << "Warning: " << message << std::endl;
+			break;
+		case QtCriticalMsg:
+			std::cout << "Critical: " << message << std::endl;
+			break;
+		case QtFatalMsg:
+			std::cout << "Fatal: " << message << std::endl;
+			std::abort();
+			break;
+	}
+}
+
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
+	qInstallMsgHandler(customMessageHandler);
+
+	qmlRegisterType<bb::device::Led>("bb.device", 1, 0, "Led");
+	qmlRegisterUncreatableType<bb::device::LedColor>("bb.device", 1, 0, "LedColor", "");
+
+	qmlRegisterType<ayvu::ContactViewer>();
+	qmlRegisterType<ayvu::AudioControl>("ayvu.audio", 1, 0, "AudioControl");
+
     Application app(argc, argv);
 
     // Create the Application UI object, this is where the main.qml file
     // is loaded and the application scene is set.
     new ApplicationUI(&app);
+
 
     // Enter the application main event loop.
     return Application::exec();
